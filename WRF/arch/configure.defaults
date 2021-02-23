@@ -1364,14 +1364,13 @@ FCSUFFIX        =
 BYTESWAPIO      =       -convert big_endian
 RECORDLENGTH    =       -assume byterecl
 #add -fp-model precise in FCBASEOPTS_NO_G to improve the accuracy of WRFPLUS check_AD test, suggested by Thomas Schwitalla.
-FCBASEOPTS_NO_G =       -w -ftz -fno-alias -align all $(FORMAT_FREE) $(BYTESWAPIO) #-fp-model precise #-vec-report6
+FCBASEOPTS_NO_G =       -w -ftz -fno-alias -align all -fp-model precise $(FORMAT_FREE) $(BYTESWAPIO) #-fp-model precise #-vec-report6
 FCBASEOPTS      =       $(FCBASEOPTS_NO_G) $(FCDEBUG)
 LIB_LOCAL       =       -L$(SNOWLIBS)/snow_libs/lib -lcoupler \
                         -lstdc++ \
                         -L$(SNOWLIBS)/snow_libs/lib -lmeteoio -lsnowpack
 CFLAGS_LOCAL    =       -w -O3 -ip -fp-model precise -w -ftz -align all -fno-alias $(FORMAT_FREE) $(BYTESWAPIO) #-xHost -fp-model fast=2 -no-prec-div -no-prec-sqrt -ftz -no-multibyte-chars 
 LDFLAGS_LOCAL   =       -ip -fp-model precise -w -ftz -align all -fno-alias $(FORMAT_FREE) $(BYTESWAPIO) #-xHost -fp-model fast=2 -no-prec-div -no-prec-sqrt -ftz -align all -fno-alias -fno-common 
-FCBASEOPTS_NO_G =       -w -ip -fp-model precise -w -ftz -align all -fno-alias $(FORMAT_FREE) $(BYTESWAPIO) #-xHost -fp-model fast=2 -no-heap-arrays -no-prec-div -no-prec-sqrt -ftz -align all -fno-alias -fno-common $(FORMAT_FREE) $(BYTESWAPIO)
 
 MODULE_SRCH_FLAG =     
 TRADFLAG        =      CONFIGURE_TRADFLAG
