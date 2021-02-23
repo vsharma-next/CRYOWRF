@@ -1,0 +1,159 @@
+&time_control
+ run_days                       = 0,      
+ run_hours                      = 0,      
+ run_minutes                    = 0,     
+ run_seconds                    = 0,     
+ start_year                     = 2019, 2019,
+ start_month                    = 03, 03,  
+ start_day                      = 01, 01,
+ start_hour                     = 00, 00,
+ start_minute                   = 00, 00,
+ start_second                   = 00, 00,
+ end_year                       = 2019, 2019,
+ end_month                      = 03, 03,
+ end_day                        = 01, 01,
+ end_hour                       = 06, 02,
+ end_minute                     = 00, 00,
+ end_second                     = 00, 00,
+ interval_seconds               = 3600,
+ input_from_file                = .true., .true.,
+ fine_input_stream              = 0, 2,
+ history_interval               = 360, 360,
+ frames_per_outfile             = 48, 48,
+ history_outname                = './wrfout/wrfout_d<domain>_<date>.nc'
+ restart                        = .false.,
+ restart_interval               = 360,
+ write_hist_at_0h_rst           = .true.,
+ reset_simulation_start         = .true.,
+ io_form_history                = 2,
+ io_form_restart                = 2,
+ rst_inname                     = './restart/wrfrst_d<domain>_<date>',
+ rst_outname                    = './restart/wrfrst_d<domain>_<date>',
+ io_form_input                  = 2,
+ io_form_boundary               = 2,
+ io_form_auxinput2              = 2,
+ io_form_auxhist24              = 2,
+ auxhist24_interval_s           = 5, 60, 
+ auxhist24_outname              = './outhist/outhist_d<domain>_<date>.nc',
+ frames_per_auxhist24           = 144, 144,
+ iofields_filename              = "heights_output_CCAMM.txt","heights_output_CCAMM.txt",
+ debug_level                    = 0     
+/
+
+&domains
+ time_step                      = 5,
+ time_step_fract_num            = 0,
+ time_step_fract_den            = 1,
+ max_dom                        = 1,
+ e_we                           = 64, 151,
+ e_sn                           = 64, 181,
+ e_vert                         = 60, 60,
+ vert_refine_method             = 0,0,
+! eta_levels                     = 1, 0.993, 0.983, 0.97, 0.954, 0.934, 0.909, 0.88, 0.8679016, 0.8558034, 0.8437051, 0.8316067, 0.8079001, 0.7845152, 0.7614485, 0.7386963, 0.7162551, 0.6941214, 0.6722915, 0.6507621, 0.6295298, 0.608591, 0.5879425, 0.5675809, 0.5475029, 0.5277053, 0.5081847, 0.488938, 0.469962, 0.4512536, 0.4328096, 0.4146269, 0.3967026, 0.3790335, 0.3616167, 0.3444492, 0.3275281, 0.3108504, 0.2944133, 0.2782139, 0.2622495, 0.2465171, 0.2310141, 0.2157377, 0.2006852, 0.1858538, 0.1712411, 0.1568442, 0.1426606, 0.1286878, 0.1149231, 0.1013641, 0.08800822, 0.074853, 0.06189599, 0.04913476, 0.03656691, 0.02419006, 0.01200187, 0,
+!1, 0.999, 0.998, 0.996, 0.994, 0.992, 0.990, 0.980, 0.970, 0.960, 0.950, 0.940, 0.930, 0.920, 0.910, 0.900, 0.890, 0.880, 0.8713248, 0.8626496, 0.8539743, 0.8452992, 0.8282002, 0.8112669, 0.7944981, 0.7778924, 0.7614484, 0.745165, 0.7290407, 0.7130743, 0.6972646, 0.68161, 0.6661096, 0.650762, 0.6355659, 0.6205201, 0.6056233, 0.5908744, 0.5762722, 0.5618153, 0.5475027, 0.5333331, 0.5193053, 0.5054182, 0.4916706, 0.4780613, 0.4645893, 0.4512533, 0.4380522, 0.4249849, 0.4120502, 0.3992472, 0.3865746, 0.3740314, 0.3616164, 0.3493286, 0.337167, 0.3251304, 0.3132178, 0.3014282, 0.2897605, 0.2782136, 0.2667867, 0.2554785, 0.2442882, 0.2332146, 0.2222569, 0.211414, 0.2006849, 0.1900687, 0.1795644, 0.169171, 0.1588876, 0.1487132, 0.1386468, 0.1286876, 0.1188346, 0.1090869, 0.09944359, 0.08990372, 0.0804664, 0.07113075, 0.06189587, 0.05276088, 0.04372491, 0.03478707, 0.02594652, 0.01720238, 0.008553809, 0,
+ p_top_requested                = 15000,
+ num_metgrid_levels             = 47,
+ num_metgrid_soil_levels        = 6, 
+ dx                             = 1250, 250,
+ dy                             = 1250, 250,
+ grid_id                        = 1, 2,
+ parent_id                      = 1, 1,
+ i_parent_start                 = 1, 62,
+ j_parent_start                 = 1, 71,
+ parent_grid_ratio              = 1, 5,
+ parent_time_step_ratio         = 1, 5,
+ feedback                       = 0,
+ smooth_option                  = 0,
+ smooth_cg_topo                 = .true.,
+ sfcp_to_sfcp                   = .true.,
+
+ max_ts_locs                         = 25,
+ ts_buf_size                         = 2000,
+ max_ts_level                        = 15,
+ tslist_unstagger_winds              = True,
+
+/
+
+&physics
+ mp_physics                     = 10, 10,
+ ra_lw_physics                  = 4, 4,
+ ra_sw_physics                  = 4, 4,
+ slope_rad                      = 1, 1,
+ topo_shading                   = 1, 1,
+ radt                           = 5., 5.,
+ sf_sfclay_physics              = 91, 1,
+ sf_surface_physics             = 18, 18,
+ bl_pbl_physics                 = 11, 11,
+ bldt                           = 0, 0,
+ cu_physics                     = 0, 0,
+ cudt                           = 0, 0,
+ isfflx                         = 1, 
+ ifsnow                         = 1,
+ icloud                         = 1,
+ surface_input_source           = 1,
+ num_soil_layers                = 4,
+ num_land_cat                   = 24,
+ sf_urban_physics               = 0, 0,
+ blowing_snow                   = .false.,.true.,.true.
+ blowing_snow_sublimation       = .false.,.true.,.true.
+ bs_rad_effect                  = .false.,.false.,.false.
+ sn_start_from_file             = .true.,.false.,.false.
+ num_bs_sfc_layers              = 8,
+ no_snpack_lay_to_sav           = 500,
+ snpack_dt                      = 15,0.1666666667,1.5
+ snpack_write_dt                = 3600,1440,1440
+ snpack_mode                    = 'land'
+/
+
+&noah_mp
+ dveg = 3,
+ opt_crs = 1,
+ opt_sfc = 1,
+ opt_btr = 2,
+ opt_run = 3,
+ opt_frz = 1,
+ opt_inf = 2,
+ opt_rad = 3,
+ opt_alb = 1,
+ opt_snf = 2,
+ opt_tbot = 2,
+ opt_stc = 1,
+/
+ 
+&fdda
+ /
+  
+&dynamics
+ rk_ord                         = 3,
+ diff_opt                       = 2, 2,
+ km_opt                         = 4, 4,
+ sfs_opt                        = 0, 0,
+ diff_6th_opt                   = 0, 0,
+ damp_opt                       = 3,
+ zdamp                          = 5000., 5000.,
+ dampcoef                       = 0.2, 0.2,
+ w_damping                      = 0,
+ khdif                          = 0, 0,
+ kvdif                          = 0, 0,
+ non_hydrostatic                = .true.,.true.,
+ moist_adv_opt                  = 1, 1,
+ scalar_adv_opt                 = 1, 1,
+ epssm                          = 1, 1,
+ mix_full_fields                = .true.,.true.
+ /
+ 
+&bdy_control
+ specified                      = .true., .false.,
+ spec_bdy_width                 = 5,
+ spec_zone                      = 1,
+ relax_zone                     = 4,
+ nested                         = .false., .true.,
+ /
+ 
+&grib2
+ /
+ 
+&namelist_quilt
+ nio_tasks_per_group            = 0,
+ nio_groups                     = 1,
+ /

@@ -1,0 +1,128 @@
+2021-02-11 10:41:15.929 ---  *** Starting program geogrid.exe ***
+2021-02-11 10:41:15.932 --- Using the following namelist variables:
+2021-02-11 10:41:15.932 --- &SHARE
+2021-02-11 10:41:15.932 ---   WRF_CORE         = ARW
+2021-02-11 10:41:15.932 ---   MAX_DOM          = 2
+2021-02-11 10:41:15.932 ---   START_YEAR       = 0
+2021-02-11 10:41:15.932 ---                    = 0
+2021-02-11 10:41:15.932 ---   START_MONTH      = 0
+2021-02-11 10:41:15.932 ---                    = 0
+2021-02-11 10:41:15.932 ---   START_DAY        = 0
+2021-02-11 10:41:15.932 ---                    = 0
+2021-02-11 10:41:15.932 ---   START_HOUR       = 0
+2021-02-11 10:41:15.932 ---                    = 0
+2021-02-11 10:41:15.932 ---   START_MINUTE     = 0
+2021-02-11 10:41:15.932 ---                    = 0
+2021-02-11 10:41:15.932 ---   START_SECOND     = 0
+2021-02-11 10:41:15.932 ---                    = 0
+2021-02-11 10:41:15.932 ---   END_YEAR         = 0
+2021-02-11 10:41:15.932 ---                    = 0
+2021-02-11 10:41:15.932 ---   END_MONTH        = 0
+2021-02-11 10:41:15.932 ---                    = 0
+2021-02-11 10:41:15.932 ---   END_DAY          = 0
+2021-02-11 10:41:15.932 ---                    = 0
+2021-02-11 10:41:15.932 ---   END_HOUR         = 0
+2021-02-11 10:41:15.932 ---                    = 0
+2021-02-11 10:41:15.932 ---   END_MINUTE       = 0
+2021-02-11 10:41:15.932 ---                    = 0
+2021-02-11 10:41:15.932 ---   END_SECOND       = 0
+2021-02-11 10:41:15.932 ---                    = 0
+2021-02-11 10:41:15.932 ---   START_DATE       = 2019-03-06_00:00:00
+2021-02-11 10:41:15.932 ---                    = 2019-03-06_00:00:00
+2021-02-11 10:41:15.932 ---   END_DATE         = 2019-03-30_00:00:00
+2021-02-11 10:41:15.932 ---                    = 2019-03-30_00:00:00
+2021-02-11 10:41:15.932 ---   INTERVAL_SECONDS = 3600
+2021-02-11 10:41:15.932 ---   IO_FORM_GEOGRID  = 2
+2021-02-11 10:41:15.932 ---   OPT_OUTPUT_FROM_GEOGRID_PATH = ./
+2021-02-11 10:41:15.932 ---   SUBGRID_RATIO_X  = 1
+2021-02-11 10:41:15.932 ---                    = 1
+2021-02-11 10:41:15.932 ---   SUBGRID_RATIO_Y  = 1
+2021-02-11 10:41:15.932 ---                    = 1
+2021-02-11 10:41:15.932 ---   DEBUG_LEVEL      = 0
+2021-02-11 10:41:15.932 ---   ACTIVE_GRID      = .TRUE.
+2021-02-11 10:41:15.932 ---                    = .TRUE.
+2021-02-11 10:41:15.932 ---   NOCOLONS         = .FALSE.
+2021-02-11 10:41:15.932 --- /
+2021-02-11 10:41:15.932 --- &GEOGRID
+2021-02-11 10:41:15.932 ---   PARENT_ID         = 1
+2021-02-11 10:41:15.933 ---                     = 1
+2021-02-11 10:41:15.933 ---   PARENT_GRID_RATIO = 1
+2021-02-11 10:41:15.933 ---                     = 5
+2021-02-11 10:41:15.933 ---   I_PARENT_START    = 1
+2021-02-11 10:41:15.933 ---                     = 62
+2021-02-11 10:41:15.933 ---   J_PARENT_START    = 1
+2021-02-11 10:41:15.933 ---                     = 71
+2021-02-11 10:41:15.933 ---   S_WE              = 1
+2021-02-11 10:41:15.933 ---                     = 1
+2021-02-11 10:41:15.933 ---   E_WE              = 148
+2021-02-11 10:41:15.933 ---                     = 151
+2021-02-11 10:41:15.933 ---   S_SN              = 1
+2021-02-11 10:41:15.933 ---                     = 1
+2021-02-11 10:41:15.933 ---   E_SN              = 178
+2021-02-11 10:41:15.933 ---                     = 181
+2021-02-11 10:41:15.933 ---   GEOG_DATA_RES     = 1s
+2021-02-11 10:41:15.933 ---                     = 1s
+2021-02-11 10:41:15.933 ---   DX                = 1250.000000
+2021-02-11 10:41:15.933 ---   DY                = 1250.000000
+2021-02-11 10:41:15.933 ---   MAP_PROJ          = lambert
+2021-02-11 10:41:15.933 ---   POLE_LAT          = 90.000000
+2021-02-11 10:41:15.933 ---   POLE_LON          = 0.000000
+2021-02-11 10:41:15.933 ---   REF_LAT           = 45.809757
+2021-02-11 10:41:15.933 ---   REF_LON           = 8.611886
+2021-02-11 10:41:15.933 ---   REF_X             = 1.000000
+2021-02-11 10:41:15.933 ---   REF_Y             = 1.000000
+2021-02-11 10:41:15.933 ---   TRUELAT1          = 46.400002
+2021-02-11 10:41:15.933 ---   TRUELAT2          = 47.200001
+2021-02-11 10:41:15.933 ---   STAND_LON         = 9.750000
+2021-02-11 10:41:15.933 ---   GEOG_DATA_PATH    = /project/s938/WRF_STATIC_DATA/WPS_GEOG/
+2021-02-11 10:41:15.933 ---   OPT_GEOGRID_TBL_PATH = geogrid/
+2021-02-11 10:41:15.933 --- /
+2021-02-11 10:41:15.985 --- Processing domain 1 of 2
+2021-02-11 10:41:15.985 --- INFORM: Using 1s interpolator sequence for HGT_M.
+2021-02-11 10:41:15.985 --- INFORM: Using 1s data source for HGT_M.
+2021-02-11 10:41:15.989 --- INFORM: Using 1s interpolator sequence for HGT_U.
+2021-02-11 10:41:15.989 --- INFORM: Using 1s data source for HGT_U.
+2021-02-11 10:41:15.989 --- INFORM: Using 1s interpolator sequence for HGT_V.
+2021-02-11 10:41:15.989 --- INFORM: Using 1s data source for HGT_V.
+2021-02-11 10:41:15.989 --- INFORM: Using 1s interpolator sequence for LANDUSEF.
+2021-02-11 10:41:15.989 --- INFORM: Using 1s data source for LANDUSEF.
+2021-02-11 10:41:15.991 --- INFORM: Using 1s interpolator sequence for SOILCTOP.
+2021-02-11 10:41:15.991 --- INFORM: Using 1s data source for SOILCTOP.
+2021-02-11 10:41:15.993 --- INFORM: Using 1s interpolator sequence for SOILCBOT.
+2021-02-11 10:41:15.993 --- INFORM: Using 1s data source for SOILCBOT.
+2021-02-11 10:41:16.215 --- Processing field 1 of 11 (LANDUSEF)
+2021-02-11 10:42:12.289 --- Processing field 2 of 11 (LU_INDEX)
+2021-02-11 10:42:12.300 --- Processing field 3 of 11 (HGT_M)
+2021-02-11 10:43:05.640 --- Processing field 4 of 11 (SLPX)
+2021-02-11 10:43:05.646 --- Processing field 5 of 11 (SLPY)
+2021-02-11 10:43:05.652 --- Processing field 6 of 11 (HGT_U)
+2021-02-11 10:44:00.146 --- Processing field 7 of 11 (HGT_V)
+2021-02-11 10:44:52.696 --- Processing field 8 of 11 (SOILCTOP)
+2021-02-11 10:45:46.893 --- Processing field 9 of 11 (SCT_DOM)
+2021-02-11 10:45:46.898 --- Processing field 10 of 11 (SOILCBOT)
+2021-02-11 10:46:39.786 --- Processing field 11 of 11 (SCB_DOM)
+2021-02-11 10:46:39.796 --- Processing domain 2 of 2
+2021-02-11 10:46:39.796 --- INFORM: Using 1s interpolator sequence for HGT_M.
+2021-02-11 10:46:39.796 --- INFORM: Using 1s data source for HGT_M.
+2021-02-11 10:46:39.797 --- INFORM: Using 1s interpolator sequence for HGT_U.
+2021-02-11 10:46:39.797 --- INFORM: Using 1s data source for HGT_U.
+2021-02-11 10:46:39.799 --- INFORM: Using 1s interpolator sequence for HGT_V.
+2021-02-11 10:46:39.799 --- INFORM: Using 1s data source for HGT_V.
+2021-02-11 10:46:39.799 --- INFORM: Using 1s interpolator sequence for LANDUSEF.
+2021-02-11 10:46:39.799 --- INFORM: Using 1s data source for LANDUSEF.
+2021-02-11 10:46:39.800 --- INFORM: Using 1s interpolator sequence for SOILCTOP.
+2021-02-11 10:46:39.800 --- INFORM: Using 1s data source for SOILCTOP.
+2021-02-11 10:46:39.800 --- INFORM: Using 1s interpolator sequence for SOILCBOT.
+2021-02-11 10:46:39.800 --- INFORM: Using 1s data source for SOILCBOT.
+2021-02-11 10:46:39.889 --- Processing field 1 of 11 (LANDUSEF)
+2021-02-11 10:47:39.327 --- Processing field 2 of 11 (LU_INDEX)
+2021-02-11 10:47:39.341 --- Processing field 3 of 11 (HGT_M)
+2021-02-11 10:48:38.910 --- Processing field 4 of 11 (SLPX)
+2021-02-11 10:48:38.918 --- Processing field 5 of 11 (SLPY)
+2021-02-11 10:48:38.926 --- Processing field 6 of 11 (HGT_U)
+2021-02-11 10:49:38.834 --- Processing field 7 of 11 (HGT_V)
+2021-02-11 10:50:39.290 --- Processing field 8 of 11 (SOILCTOP)
+2021-02-11 10:51:39.410 --- Processing field 9 of 11 (SCT_DOM)
+2021-02-11 10:51:39.421 --- Processing field 10 of 11 (SOILCBOT)
+2021-02-11 10:52:39.871 --- Processing field 11 of 11 (SCB_DOM)
+2021-02-11 10:52:39.888 ---  *** Successful completion of program geogrid.exe ***
