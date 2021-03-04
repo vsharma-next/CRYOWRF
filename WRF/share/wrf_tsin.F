@@ -74,11 +74,11 @@ SUBROUTINE wrf_tsin ( grid , ierr )
                 istatus = 0
                 DO WHILE (istatus == 0)
                    IF (config_flags%map_proj == 0 .OR. grid%tslist_ij) THEN !ideal run will only use i,j
-                       READ(UNIT=iunit, FMT='(A25,1X,A5,1X,I7,1X,I8)', IOSTAT=istatus)            &
+                       READ(UNIT=iunit, FMT='(A25,1X,A5,1X,I9,1X,I10)', IOSTAT=istatus)            &
                        grid%desctsloc(grid%ntsloc+1), grid%nametsloc(grid%ntsloc+1), &
                        grid%itsloc(grid%ntsloc+1), grid%jtsloc(grid%ntsloc+1)
                    ELSE
-                       READ(UNIT=iunit, FMT='(A25,1X,A5,1X,F7.3,1X,F8.3)', IOSTAT=istatus)            &
+                       READ(UNIT=iunit, FMT='(A25,1X,A5,1X,F9.5,1X,F10.5)', IOSTAT=istatus)            &
                        grid%desctsloc(grid%ntsloc+1), grid%nametsloc(grid%ntsloc+1), &
                        grid%lattsloc(grid%ntsloc+1), grid%lontsloc(grid%ntsloc+1)
                    END IF
