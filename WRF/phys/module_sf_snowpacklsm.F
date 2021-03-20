@@ -441,8 +441,8 @@ enddo
 enddo
 
 do k=1,snc_N
-   sfc_qi_drift(its:ite,k,jts:jte)  = VW_SFC(its:ite,k,jts:jte) * sn_qs(its:ite,k,jts:jte) 
-   sfc_qni_drift(its:ite,k,jts:jte) = VW_SFC(its:ite,k,jts:jte) * sn_ns(its:ite,k,jts:jte) 
+   sfc_qi_drift(its:ite,k,jts:jte)  = VW_SFC(its:ite,k,jts:jte) * sn_qs(its:ite,k,jts:jte) * rho_v(its:ite,kms,jts:jte)  
+   sfc_qni_drift(its:ite,k,jts:jte) = VW_SFC(its:ite,k,jts:jte) * sn_ns(its:ite,k,jts:jte) * rho_v(its:ite,kms,jts:jte)
 enddo
 !!!!!!!!!! END OF BLOWING SNOW SURFACE MASS BALANCE and SFC LAYER ADVECTION
 
