@@ -917,7 +917,8 @@ BENCH_START(surf_driver_tim)
      &        ,e_budg_raine=grid%e_budg_raine,e_budg_totale=grid%e_budg_totale,in_glo_counter=grid%glo_counter &
      &        ,sn_T = grid%sn_T , sn_thick = grid%sn_thick , sn_volI = grid%sn_volI , sn_volW = grid%sn_volW , sn_volV = grid%sn_volV &
      &        ,sn_rg = grid%sn_rg , sn_rb = grid%sn_rb , sn_dd = grid%sn_dd , sn_sp = grid%sn_sp , sn_cdot = grid%sn_cdot &
-     &        ,sn_meta = grid%sn_meta,sn_depd = grid%sn_depd, bs_bool = config_flags%blowing_snow, sn_nlayers = grid%sn_nlayers &
+     &        ,sn_meta = grid%sn_meta,sn_depd = grid%sn_depd,sn_graintype=grid%sn_graintype,sn_mk=grid%sn_mk &
+     &        ,bs_bool = config_flags%blowing_snow, sn_nlayers = grid%sn_nlayers &
      &        ,snc_Z=grid%snc_Z,snc_N=config_flags%num_bs_sfc_layers,snpack_layers_to_save=config_flags%no_snpack_lay_to_sav &
      &        ,sn_qs=grid%sn_qs,sn_ns=grid%sn_ns &
      &        ,sfc_T=grid%sfc_T,sfc_Q=grid%sfc_Q,sfc_RH=grid%sfc_RH,sfc_SQ=grid%sfc_SQ,sfc_SN=grid%sfc_SN,sfc_meanR=grid%sfc_meanR &

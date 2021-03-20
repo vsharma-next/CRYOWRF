@@ -1255,7 +1255,8 @@ endif
                       ,grid%aeropcu,grid%EFCG,grid%EFCS,grid%EFIG,grid%EFIS,grid%EFSG,grid%EFSS      &
                       ,grid%in_drift,grid%in_conc,grid%in_csalt,grid%in_q_lb,grid%in_N_lb, grid%grid_id, grid%glo_counter &
                       ,grid%sn_T,grid%sn_thick,grid%sn_volI,grid%sn_volW,grid%sn_volV,grid%sn_rg,grid%sn_rb &
-                      ,grid%sn_dd,grid%sn_sp,grid%sn_cdot,grid%sn_meta,grid%sn_depd,grid%sn_nlayers,&
+                      ,grid%sn_dd,grid%sn_sp,grid%sn_cdot,grid%sn_meta,grid%sn_depd,grid%sn_graintype,grid%sn_mk &
+                      ,grid%sn_nlayers,&
                        grid%sn_start_from_file,z_firstlev,config_flags%num_bs_sfc_layers,grid%snc_Z,&
                        grid%sn_qs,grid%sn_ns)
        ENDDO ! loop of tiles for phy_init

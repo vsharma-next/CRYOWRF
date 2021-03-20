@@ -259,7 +259,8 @@ CONTAINS
 #endif
 !!! ADDED FOR CRYOWRF
                          ,in_drift,in_conc,in_csalt,in_q_lb,in_N_lb,in_grid_id,in_glo_counter &
-                         ,sn_T,sn_thick,sn_volI,sn_volW,sn_volV,sn_rg,sn_rb,sn_dd,sn_sp,sn_cdot,sn_meta,sn_depd,sn_nlayers, &
+                         ,sn_T,sn_thick,sn_volI,sn_volW,sn_volV,sn_rg,sn_rb,sn_dd,sn_sp,sn_cdot,sn_meta,sn_depd &
+                         ,sn_graintype,sn_mk, sn_nlayers, &
                          sn_start_from_file,z_firstlev,snc_N,snc_Z,sn_qs,sn_ns &
 !!! ADDED FOR CRYOWRF
 )
@@ -806,6 +807,8 @@ CONTAINS
    REAL,    OPTIONAL, DIMENSION(ims:ime,1:100,jms:jme),intent(inout) :: sn_cdot 
    REAL,    OPTIONAL, DIMENSION(ims:ime,1:100,jms:jme),intent(inout) :: sn_meta  
    REAL,    OPTIONAL, DIMENSION(ims:ime,1:100,jms:jme),intent(inout) :: sn_depd 
+   REAL,    OPTIONAL, DIMENSION(ims:ime,1:100,jms:jme),intent(inout) :: sn_graintype 
+   REAL,    OPTIONAL, DIMENSION(ims:ime,1:100,jms:jme),intent(inout) :: sn_mk
 
    real, dimension(ims:ime,snc_N,jms:jme),intent(inout) :: snc_Z,sn_ns,sn_qs
 
@@ -1507,7 +1510,7 @@ CONTAINS
                 ,in_drift,in_conc,in_csalt,in_q_lb,in_N_lb      &  ! " " "
                 ,in_glo_counter,sn_T,sn_thick,sn_volI           &  ! " " "
                 ,sn_volW,sn_volV,sn_rg,sn_rb,sn_dd,sn_sp        &  ! " " "
-                ,sn_cdot,sn_meta,sn_depd,sn_nlayers             &  ! " " "
+                ,sn_cdot,sn_meta,sn_depd,sn_graintype,sn_mk,sn_nlayers  &  ! " " "
                 ,sn_start_from_file,zfull,zhalf                 &  ! " " "
                 ,z_firstlev,snc_N,snc_Z ) 
 
@@ -2526,7 +2529,7 @@ CONTAINS
                 ,in_q_lb,in_N_lb,in_glo_counter,sn_T            &  ! " " "
                 ,sn_thick,sn_volI,sn_volW,sn_volV               &  ! " " "
                 ,sn_rg,sn_rb,sn_dd,sn_sp,sn_cdot                &  ! " " "
-                ,sn_meta,sn_depd,sn_nlayers,sn_start_from_file, &  ! " " "
+                ,sn_meta,sn_depd,sn_graintype,sn_mk,sn_nlayers,sn_start_from_file, &  ! " " "
                 zfull,zhalf,z_firstlev,snc_N,snc_Z  )
 !--------------------------------------------------------------------
    USE module_sf_sfclay
@@ -2965,6 +2968,8 @@ CONTAINS
    REAL,    OPTIONAL, DIMENSION(ims:ime,1:100,jms:jme) ,intent(inout) :: sn_cdot 
    REAL,    OPTIONAL, DIMENSION(ims:ime,1:100,jms:jme) ,intent(inout) :: sn_meta  
    REAL,    OPTIONAL, DIMENSION(ims:ime,1:100,jms:jme) ,intent(inout) :: sn_depd  
+   REAL,    OPTIONAL, DIMENSION(ims:ime,1:100,jms:jme) ,intent(inout) :: sn_graintype 
+   REAL,    OPTIONAL, DIMENSION(ims:ime,1:100,jms:jme) ,intent(inout) :: sn_mk
 
    integer, dimension(ims:ime,jms:jme),intent(inout) :: sn_nlayers
    logical,intent(inout) :: sn_start_from_file
@@ -3266,7 +3271,7 @@ CALL lsm_mosaic_init(IVGTYP,config_flags%ISWATER,config_flags%ISURBAN,config_fla
                              its,ite,jts,jte,kts,kte,  &
                              dt,ht,in_grid_id,in_glo_counter,sn_nlayers,sn_T, &
                              sn_thick,sn_volI,sn_volW,sn_volV,sn_rg,sn_rb, &
-                             sn_dd,sn_sp,sn_cdot,sn_meta,sn_depd,sn_start_from_file, &
+                             sn_dd,sn_sp,sn_cdot,sn_meta,sn_depd,sn_graintype,sn_mk,sn_start_from_file, &
                              z_firstlev,snc_N,snc_Z,snpack_dt = config_flags%snpack_dt, &
                             snpack_write_dt = config_flags%snpack_write_dt, &
                             snpack_layers_to_save = config_flags%no_snpack_lay_to_sav &

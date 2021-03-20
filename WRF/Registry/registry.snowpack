@@ -59,6 +59,11 @@ state   real    sn_sp    i{snpacky}j   misc         1         Z     rhd=(interp_
 state   real    sn_cdot  i{snpacky}j   misc         1         Z     rhd=(interp_fcn_nn)     "sn_cdot" "snpack_strain" "-"
 state   real    sn_meta  i{snpacky}j   misc         1         Z     rhd=(interp_fcn_nn)     "sn_metamo"   "metamo" "-"
 state   real    sn_depd  i{snpacky}j   misc         1         Z     rhd=(interp_fcn_nn)     "sn_depd"  "sn_layer_dep" "-"
+state   real    sn_graintype  i{snpacky}j   misc    1         Z     rhd=(interp_fcn_nn)     "sn_graintype"  "sn_graintype" "-"
+state   real    sn_mk  i{snpacky}j   misc           1         Z     rhd=(interp_fcn_nn)     "sn_mk"  "sn_grain_mk" "-"
+
+
+
 state   integer sn_nlayers ij          misc         1         -     rhd=(interp_fcni)   "sn_nlayers" "snowpack layers" "-"
 
 #state   real    sn_T     i{snpacky}j   misc         1         Z     rhd=(interp_fcn_nn_snpack:xice,xland)     "snpack_T"  "snowpack temperature" "K"

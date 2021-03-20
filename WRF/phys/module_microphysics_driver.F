@@ -3121,10 +3121,10 @@ real,dimension(ims:ime,snc_N,jms:jme), intent(inout) :: sn_qi_sublim3d
 
    mass_balance=0.0
    do k=1,bs_Ntot-1
-      mass_balance = mass_balance +  (bs_qi_loc(k)-qi_final(k))*0.5*(bs_dz(k)+bs_dz(k+1))
+      mass_balance = mass_balance +  (bs_qi_loc(k)-qi_final(k))*0.5*(bs_dz(k)+bs_dz(k+1)) * rho(i,k,j)
    enddo
 
-   if(abs(mass_balance) .lt. 1.0e-12) then
+   if(abs(mass_balance) .lt. 1.0e-9) then
      mass_balance=0.0
    endif
    in_bs_sedi(I,J) = mass_balance
@@ -3237,12 +3237,19 @@ if(bool_snow_sublimation) then
          bs_sublim_qni(k) = 0.0
        endif ! END OF IF STATEMENT FOR QI_FINAL/QNI_FINAL greater than a threshold
 
+       if(abs(bs_sublim_qi(k)) .le. 1.0e-8) then
+             bs_sublim_qi(k) = 0.0
+             bs_sublim_qni(k) = 0.0
+       endif
+ 
+
     enddo ! END LOOP OVER K
 
+    !! VARUN HACK TO CHECK MASS BALANCE
     !! GETTING THE corrections for temperature and humidity due to sublimation/deposition
     do k=snc_N+1,bs_Ntot-1
-       qv_corr(k) = dt_in * bs_sublim_qi(k) * -1.0
-        t_corr(k) = dt_in * bs_sublim_qi(k) *  1.0 * lsub(k) / Cp_air 
+       qv_corr(k) = dt_in * bs_sublim_qi(k) * (-1.0)
+       t_corr(k) = dt_in * bs_sublim_qi(k) *  1.0 * lsub(k) / Cp_air 
     enddo
 
     !!! correct local QV and TEMP
@@ -3260,10 +3267,10 @@ if(bool_snow_sublimation) then
 
     !!! correcting the surface heat flux and the vapor flux 
     HFX_corr =  sum(lsub(1:snc_N) * bs_sublim_qi(1:snc_N) * bs_grid_height(1:snc_N) * bs_rho(1:snc_N))
-    QFX_corr =  sum(bs_sublim_qi(1:snc_N) * bs_grid_height(1:snc_N) * -1.0 * bs_rho(1:snc_N))
+    QFX_corr =  sum(bs_sublim_qi(1:snc_N) * bs_grid_height(1:snc_N) * (-1.0) * bs_rho(1:snc_N))
 
-    !!! calculating the total mass sublimated (kg/m2) in air column 
-    bs_sublim(I,J) = bs_sublim(I,J) + sum( -1.0 * bs_sublim_qi(1:bs_Ntot-1) * &
+   !!! calculating the total mass sublimated (kg/m2) in air column 
+    bs_sublim(I,J) = bs_sublim(I,J) + sum( (-1.0) * bs_sublim_qi(1:bs_Ntot-1) * &
 &                                          bs_grid_height(1:bs_Ntot-1) * dt_in * bs_rho(1:bs_Ntot-1) )
 
  !UPDATING the qi_final and qni_final arrays to account for sublimation  
@@ -3276,7 +3283,15 @@ enddo
 qi_final = max(1.0E-12,qi_final)
 qni_final = max(1.0E-6,qni_final)
 
+
+else
+
+bs_sublim = 0.0
+HFX_corr = 0.0
+QFX_corr = 0.0
+
 endif ! END OF BLOWING SNOW SUBLIMATION
+
 
 if(bs_rad_effect) then 
 

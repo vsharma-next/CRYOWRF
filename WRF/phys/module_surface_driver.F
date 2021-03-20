@@ -297,9 +297,9 @@ CONTAINS
      &          ,hfx_sn_avg,qfx_sn_avg,snow_sn_avg,snowh_sn_avg,albedo_sn_avg &
      &          ,m_budg_precip,m_budg_erosion,m_budg_sublim,m_budg_deposit,m_budg_swe,m_budg_melt,m_budg_refreeze &
      &          ,e_budg_lw_in,e_budg_lw_out,e_budg_sw_in,e_budg_sw_out,e_budg_sensib,e_budg_latent,e_budg_low_bc,e_budg_raine &
-     &          ,e_budg_totale,in_glo_counter,sn_T,sn_thick,sn_volI,sn_volW,sn_volV,sn_rg,sn_rb,sn_dd,sn_sp,sn_cdot,sn_meta,sn_depd,bs_bool &
-     &          ,sn_nlayers,snc_Z,snc_N,snpack_layers_to_save,sn_qs,sn_ns,sfc_T,sfc_Q,sfc_RH,sfc_SQ,sfc_SN,sfc_meanR,sfc_SQ_HFX &
-     &          ,sfc_SQ_QFX,corr_q_for_rad &
+     &          ,e_budg_totale,in_glo_counter,sn_T,sn_thick,sn_volI,sn_volW,sn_volV,sn_rg,sn_rb,sn_dd,sn_sp,sn_cdot,sn_meta,sn_depd &
+     &          ,sn_graintype,sn_mk, bs_bool,sn_nlayers,snc_Z,snc_N,snpack_layers_to_save,sn_qs,sn_ns,sfc_T,sfc_Q,sfc_RH,sfc_SQ,sfc_SN & 
+     &          ,sfc_meanR,sfc_SQ_HFX ,sfc_SQ_QFX,corr_q_for_rad &
      &          ,corr_N_for_rad,exch_h,bs_qi,bs_qni,in_hsalt,global_bs_bdg_div,global_bs_bdg_xch,sfc_qi_drift,sfc_qni_drift &
      &          ,sfc_u_angle,sfc_v_angle, bs_sfc_qi_advt,bs_sfc_qni_advt,snpack_dt,snpack_write_dt,snpack_psi_s )
                                                   
@@ -1438,6 +1438,8 @@ CONTAINS
    REAL,    OPTIONAL, DIMENSION(ims:ime,snpack_layers_to_save,jms:jme) ,intent(inout) :: sn_cdot
    REAL,    OPTIONAL, DIMENSION(ims:ime,snpack_layers_to_save,jms:jme) ,intent(inout) :: sn_meta
    REAL,    OPTIONAL, DIMENSION(ims:ime,snpack_layers_to_save,jms:jme) ,intent(inout) :: sn_depd
+   REAL,    OPTIONAL, DIMENSION(ims:ime,snpack_layers_to_save,jms:jme) ,intent(inout) :: sn_graintype
+   REAL,    OPTIONAL, DIMENSION(ims:ime,snpack_layers_to_save,jms:jme) ,intent(inout) :: sn_mk
 
    logical,intent(in) :: bs_bool
    integer, dimension(ims:ime,jms:jme),intent(inout) :: sn_nlayers
@@ -3104,7 +3106,8 @@ CONTAINS
                             m_budg_melt,m_budg_refreeze,   &
                             e_budg_lw_in,e_budg_lw_out,e_budg_sw_in,e_budg_sw_out,e_budg_sensib,e_budg_latent,  &
                             e_budg_low_bc,e_budg_raine,e_budg_totale,in_glo_counter,sn_T,                          &
-                            sn_thick,sn_volI,sn_volW,sn_volV,sn_rg,sn_rb,sn_dd,sn_sp,sn_cdot,sn_meta,sn_depd,     & 
+                            sn_thick,sn_volI,sn_volW,sn_volV,sn_rg,sn_rb,sn_dd,sn_sp,sn_cdot,sn_meta,sn_depd,     &
+                            sn_graintype,sn_mk, & 
                             bs_bool,sn_nlayers, snc_Z,snc_N,sn_qs,sn_ns,sfc_T,sfc_Q,sfc_RH,sfc_SQ,sfc_SN,         &
                             sfc_meanR,sfc_SQ_HFX,sfc_SQ_QFX,rho,corr_q_for_rad,corr_N_for_rad,exch_h,bs_qi,     &
                             bs_qni,in_hsalt,global_bs_bdg_div,global_bs_bdg_xch,sfc_qi_drift,sfc_qni_drift,       &

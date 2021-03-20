@@ -24,7 +24,8 @@ CONTAINS
                m_budg_precip,m_budg_erosion,m_budg_sublim,m_budg_deposit,m_budg_swe,m_budg_melt,m_budg_refreeze &
                ,e_budg_lw_in,e_budg_lw_out,e_budg_sw_in,e_budg_sw_out,e_budg_sensib,e_budg_latent,e_budg_low_bc,e_budg_raine &
                ,e_budg_totale, in_glo_counter,sn_T &
-               ,sn_thick,sn_volI,sn_volW,sn_volV,sn_rg,sn_rb,sn_dd,sn_sp,sn_cdot,sn_meta,sn_depd,bs_bool,sn_nlayers, &
+               ,sn_thick,sn_volI,sn_volW,sn_volV,sn_rg,sn_rb,sn_dd,sn_sp,sn_cdot,sn_meta,sn_depd,sn_graintype,sn_mk &
+               ,bs_bool,sn_nlayers, &
                snc_Z,snc_N,sn_qs,sn_ns,sfc_T,sfc_Q,sfc_RH,sfc_SQ,sfc_SN,sfc_meanR,sfc_SQ_HFX,sfc_SQ_QFX,rho_v,  &
                corr_q_for_rad,corr_N_for_rad,exch_h,bs_qi,bs_qni,in_hsalt,global_bs_bdg_div,global_bs_bdg_xch, &
                sfc_qi_drift,sfc_qni_drift,sfc_u_angle,sfc_v_angle,bs_sfc_qi_advt,bs_sfc_qni_advt,snpack_dt, &
@@ -116,6 +117,8 @@ CONTAINS
    REAL,    OPTIONAL, DIMENSION(ims:ime,snpack_layers_to_save,jms:jme),intent(inout)  :: sn_cdot
    REAL,    OPTIONAL, DIMENSION(ims:ime,snpack_layers_to_save,jms:jme),intent(inout)  :: sn_meta
    REAL,    OPTIONAL, DIMENSION(ims:ime,snpack_layers_to_save,jms:jme),intent(inout)  :: sn_depd
+   REAL,    OPTIONAL, DIMENSION(ims:ime,snpack_layers_to_save,jms:jme),intent(inout)  :: sn_graintype
+   REAL,    OPTIONAL, DIMENSION(ims:ime,snpack_layers_to_save,jms:jme),intent(inout)  :: sn_mk
 
    integer, dimension(ims:ime,jms:jme),intent(inout) :: sn_nlayers
 
@@ -242,6 +245,8 @@ CONTAINS
     double precision, dimension(snpack_layers_to_save) :: arr_cdot
     double precision, dimension(snpack_layers_to_save) :: arr_meta
     double precision, dimension(snpack_layers_to_save) :: arr_depd
+    double precision, dimension(snpack_layers_to_save) :: arr_graintype
+    double precision, dimension(snpack_layers_to_save) :: arr_mk
 
     double precision :: l_rho_v
     logical,intent(in) :: bs_bool
@@ -593,6 +598,8 @@ enddo
          arr_cdot  = -999.0 
          arr_meta  = -999.0 
          arr_depd  = -999.0 
+         arr_graintype = -999.0
+         arr_mk    = -999.0
 
          counter_snowpoints = in_glo_counter(I,J)
          l_sn_nlayers = 0
@@ -616,7 +623,7 @@ enddo
   &                          l_mbug_melt,l_mbug_refreeze, &
   &                          l_ebug_lw_in,l_ebug_lw_out,l_ebug_sw_in,l_ebug_sw_out,l_ebug_sens,l_ebug_lat, &
   &                          l_ebug_low_bc,l_ebug_raine,l_ebug_totale,arr_T,arr_thick,arr_volI,arr_volW, &
-  &                          arr_volV,arr_rg,arr_rb,arr_dd,arr_sp,arr_cdot,arr_meta,arr_depd,bs_bool, &
+  &                          arr_volV,arr_rg,arr_rb,arr_dd,arr_sp,arr_cdot,arr_meta,arr_depd,arr_graintype,arr_mk,bs_bool, &
   &                          l_sn_nlayers,l_rho_v, l_bs_bdg_total, qi_in, qni_in,bs_K, bs_mass_turb,    &
   &                          bs_number_turb,l_in_hsalt,l_psi_s )
 
@@ -644,6 +651,8 @@ enddo
         sn_cdot(I,:,J) = real(arr_cdot,4)
         sn_meta(I,:,J) = real(arr_meta,4)
         sn_depd(I,:,J) = real(arr_depd,4)
+        sn_graintype(I,:,J) = real(arr_graintype,4)
+        sn_mk(I,:,J) = real(arr_mk,4)
     endif
 
     m_budg_precip(I,J)  =    m_budg_precip(I,J)   +  real(l_mbug_precip   ,4)
@@ -808,6 +817,8 @@ enddo
          sn_cdot(I,1:snpack_layers_to_save,J)  = sn_cdot(c_x,1:snpack_layers_to_save,c_y)
          sn_meta(I,1:snpack_layers_to_save,J)  = sn_meta(c_x,1:snpack_layers_to_save,c_y)
          sn_depd(I,1:snpack_layers_to_save,J)  = sn_depd(c_x,1:snpack_layers_to_save,c_y)
+         sn_graintype(I,1:snpack_layers_to_save,J)  = sn_graintype(c_x,1:snpack_layers_to_save,c_y)
+         sn_mk(I,1:snpack_layers_to_save,J)  = sn_mk(c_x,1:snpack_layers_to_save,c_y)
 
          sn_nlayers(I,J) = sn_nlayers(c_x,c_y)
  
@@ -830,6 +841,7 @@ endif
        dt,ht,                             &
        id,in_glo_counter,snpack_nlayers, sn_T, &
        sn_thick,sn_volI,sn_volW,sn_volV,sn_rg,sn_rb,sn_dd,sn_sp,sn_cdot,sn_meta,sn_depd, &
+       sn_graintype,sn_mk, &
        sn_from_file,z_firstlev,snc_N,snc_z,snpack_dt,snpack_write_dt,snpack_layers_to_save)                                                    
 
   use module_driver_constants, ONLY : max_domains
@@ -853,6 +865,8 @@ endif
    REAL,    OPTIONAL, DIMENSION(ims:ime,snpack_layers_to_save,jms:jme),intent(in)  :: sn_cdot
    REAL,    OPTIONAL, DIMENSION(ims:ime,snpack_layers_to_save,jms:jme),intent(in)  :: sn_meta
    REAL,    OPTIONAL, DIMENSION(ims:ime,snpack_layers_to_save,jms:jme),intent(in)  :: sn_depd
+   REAL,    OPTIONAL, DIMENSION(ims:ime,snpack_layers_to_save,jms:jme),intent(in)  :: sn_graintype
+   REAL,    OPTIONAL, DIMENSION(ims:ime,snpack_layers_to_save,jms:jme),intent(in)  :: sn_mk
 
    integer,intent(in) :: snc_N
    real,dimension(ims:ime,snc_N,jms:jme), intent(inout) :: snc_Z
@@ -868,6 +882,9 @@ endif
     double precision, dimension(snpack_layers_to_save) :: arr_cdot
     double precision, dimension(snpack_layers_to_save) :: arr_meta
     double precision, dimension(snpack_layers_to_save) :: arr_depd
+    double precision, dimension(snpack_layers_to_save) :: arr_graintype
+    double precision, dimension(snpack_layers_to_save) :: arr_mk
+
     integer,intent(in),dimension(ims:ime,jms:jme) :: snpack_nlayers
     logical,intent(in) :: sn_from_file
     INTEGER, INTENT(IN) :: id
@@ -959,14 +976,17 @@ endif
                      arr_cdot  = real(sn_cdot(I,1:snpack_layers_to_save,J),8)
                      arr_meta  = real(sn_meta(I,1:snpack_layers_to_save,J),8)
                      arr_depd  = real(sn_depd(I,1:snpack_layers_to_save,J),8)
-                
+                     arr_graintype = real(sn_graintype(I,1:snpack_layers_to_save,J),8)
+                     arr_mk = real(sn_mk(I,1:snpack_layers_to_save,J),8)
+ 
                 if(new_alloc) then
                    write(*,*) 'NEW ALLOC MUST BE DONE for GRID: ',id, I,J
                    call init_snowpack(id,counter_snowpoints,snpack_layers_to_save,real(XLAT(I,J),8),real(XLONG(I,J),8), &
     &                                 real(HT(I,J),8),real(263.15,8),real(dt,8)/real(60.0,8),I,J, &
     &                                 simulation_start_year,simulation_start_month,simulation_start_day,simulation_start_hour,&
     &                                 simulation_start_minute,snpack_nlayers(I,J),arr_T,arr_thick,arr_volI,arr_volW,arr_volV, &
-    &                                 arr_rg,arr_rb,arr_dd,arr_sp,arr_cdot,arr_meta,arr_depd,sn_from_file,real(1.1,8),tmp_snowh,tmp_snow,tmp_snpack_dt, &
+    &                                 arr_rg,arr_rb,arr_dd,arr_sp,arr_cdot,arr_meta,arr_depd,arr_graintype,arr_mk,sn_from_file, &
+    &                                 real(1.1,8),tmp_snowh,tmp_snow,tmp_snpack_dt, &
     &                                 tmp_snpack_write_dt)
                 SNOWH(I,J) = real(tmp_snowh,4)
                 SNOW(I,J) = real(tmp_snow,4)
