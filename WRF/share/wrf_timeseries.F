@@ -35,13 +35,13 @@ SUBROUTINE calc_ts_locations( grid )
    CHARACTER (LEN=132) :: message
    CHARACTER (LEN=40) :: ts_profile_filename
 #if (WRF_CHEM == 1)
-   INTEGER, PARAMETER :: TS_FIELDS = 12
+   INTEGER, PARAMETER :: TS_FIELDS = 14
    CHARACTER (LEN=2), DIMENSION(TS_FIELDS) :: &
-      ts_file_endings = (/ 'UU', 'VV', 'PH', 'TH', 'QV' ,'WW', 'PR', 'O3', 'QD', 'ND', 'QS', 'NS'/)
+      ts_file_endings = (/ 'UU', 'VV', 'PH', 'TH', 'QV' ,'WW', 'PR', 'O3', 'QS', 'NS', 'SQ', 'SN', 'DQ', 'DN'/)
 #else
-   INTEGER, PARAMETER :: TS_FIELDS = 11
+   INTEGER, PARAMETER :: TS_FIELDS = 13
    CHARACTER (LEN=2), DIMENSION(TS_FIELDS) :: &
-      ts_file_endings = (/ 'UU', 'VV', 'PH', 'TH', 'QV' ,'WW', 'PR', 'QD', 'ND', 'QS', 'NS'/) 
+      ts_file_endings = (/ 'UU', 'VV', 'PH', 'TH', 'QV' ,'WW', 'PR', 'QS', 'NS', 'SQ', 'SN','DQ', 'DN' /) 
 #endif
    INTEGER :: num_fields_out
    INTEGER   ierr
@@ -74,7 +74,7 @@ SUBROUTINE calc_ts_locations( grid )
    IF (config_flags%sf_surface_physics == 18) THEN
       num_fields_out = SIZE(ts_file_endings)
    ELSE
-      num_fields_out = SIZE(ts_file_endings)-4
+      num_fields_out = SIZE(ts_file_endings)-6
    END IF
      
       
@@ -490,15 +490,17 @@ SUBROUTINE calc_ts( grid )
             ELSE
                grid%ts_th_profile(n,i,k)  =  grid%t_2(ix,k,iy) + T0
             END IF
-            grid%ts_qv_profile(n,i,k)  = grid%moist(ix,k,iy,P_QV)
-            grid%ts_p_profile(n,i,k)   = grid%pb(ix,k,iy)+grid%p(ix,k,iy)
-            grid%ts_qd_profile(n,i,k)  = grid%moist(ix,k,iy,P_BS_QI)
-            grid%ts_nd_profile(n,i,k)  = grid%moist(ix,k,iy,P_BS_QNI)
+            grid%ts_qv_profile(n,i,k)   = grid%moist(ix,k,iy,P_QV)
+            grid%ts_p_profile(n,i,k)    = grid%pb(ix,k,iy)+grid%p(ix,k,iy)
+            grid%ts_qi_profile(n,i,k)   = grid%moist(ix,k,iy,P_BS_QI)
+            grid%ts_qni_profile(n,i,k)  = grid%scalar(ix,k,iy,P_BS_QNI)
             END DO
 
             do k=1,config_flags%num_bs_sfc_layers
-               grid%ts_qi_profile(n,i,k)  =  grid%sfc_qi_drift(ix,k,iy)
-               grid%ts_qni_profile(n,i,k) = grid%sfc_qni_drift(ix,k,iy)
+               grid%ts_sfc_qd_profile(n,i,k)   = grid%sfc_qi_drift(ix,k,iy)
+               grid%ts_sfc_nd_profile(n,i,k)   = grid%sfc_qni_drift(ix,k,iy)
+               grid%ts_sfc_qi_profile(n,i,k)   = grid%sn_qs(ix,k,iy)
+               grid%ts_sfc_qni_profile(n,i,k)  = grid%sn_ns(ix,k,iy)
             enddo
 
 #endif
@@ -521,7 +523,13 @@ SUBROUTINE calc_ts( grid )
          grid%ts_rainc(n,i)  = grid%rainc(ix,iy)
          grid%ts_rainnc(n,i) = grid%rainnc(ix,iy)
          grid%ts_tsk(n,i)  = grid%tsk(ix,iy)
+
          grid%ts_snd(n,i)  = grid%in_drift(ix,iy)
+         grid%ts_hsalt(n,i) = grid%in_hsalt(ix,iy)
+         grid%ts_q_lb(n,i)  = grid%in_q_lb(ix,iy)
+         grid%ts_N_lb(n,i)  = grid%in_N_lb(ix,iy)
+         grid%ts_uthresh(n,i) = grid%in_csalt(ix,iy)
+
          IF ( model_config_rec%process_time_series == 2 ) THEN
             !!! Solar diagnostics
             grid%ts_cldfrac2d(n,i) = grid%cldfrac2d(ix,iy)
@@ -565,13 +573,15 @@ SUBROUTINE calc_ts( grid )
          grid%ts_th_profile(n,i,k)    = 1.E30
          grid%ts_qv_profile(n,i,k)    = 1.E30
          grid%ts_p_profile(n,i,k)     = 1.E30
-         grid%ts_qd_profile(n,i,k)    = 1.E30
-         grid%ts_nd_profile(n,i,k)    = 1.E30
+         grid%ts_qi_profile(n,i,k)    = 1.E30
+         grid%ts_qni_profile(n,i,k)    = 1.E30
          END DO
 
          do k=1,config_flags%num_bs_sfc_layers
-             grid%ts_qi_profile(n,i,k)    = 1.E30
-             grid%ts_qni_profile(n,i,k)   = 1.E30
+             grid%ts_sfc_qi_profile(n,i,k)    = 1.E30
+             grid%ts_sfc_qni_profile(n,i,k)   = 1.E30
+             grid%ts_sfc_qd_profile(n,i,k)    = 1.E30
+             grid%ts_sfc_nd_profile(n,i,k)    = 1.E30
          enddo
 
 #endif   
@@ -594,7 +604,15 @@ SUBROUTINE calc_ts( grid )
          grid%ts_clw(n,i)  = 1.E30
          grid%ts_rainc(n,i)  = 1.E30
          grid%ts_rainnc(n,i) = 1.E30
+
          grid%ts_snd(n,i)  = 1.E30
+         grid%ts_hsalt(n,i) = 1.E30 
+         grid%ts_q_lb(n,i)  = 1.E30
+         grid%ts_N_lb(n,i)  = 1.E30
+         grid%ts_uthresh(n,i) = 1.E30
+
+
+
          IF ( model_config_rec%process_time_series == 2 ) THEN
             !!! Solar diagnostics
             grid%ts_cldfrac2d(n,i) = 1.E30
@@ -716,23 +734,33 @@ SUBROUTINE write_ts( grid )
    END DO
 
    DO k=1,grid%max_ts_level
-   ts_buf(:,:) = grid%ts_qd_profile(:,:,k)
-   CALL wrf_dm_min_reals(ts_buf(:,:),grid%ts_qd_profile(:,:,k),grid%ts_buf_size*grid%max_ts_locs)
-   END DO
-
-   DO k=1,grid%max_ts_level
-   ts_buf(:,:) = grid%ts_nd_profile(:,:,k)
-   CALL wrf_dm_min_reals(ts_buf(:,:),grid%ts_nd_profile(:,:,k),grid%ts_buf_size*grid%max_ts_locs)
-   END DO
-
-   DO k=1,config_flags%num_bs_sfc_layers
    ts_buf(:,:) = grid%ts_qi_profile(:,:,k)
    CALL wrf_dm_min_reals(ts_buf(:,:),grid%ts_qi_profile(:,:,k),grid%ts_buf_size*grid%max_ts_locs)
    END DO
 
-   DO k=1,config_flags%num_bs_sfc_layers
+   DO k=1,grid%max_ts_level
    ts_buf(:,:) = grid%ts_qni_profile(:,:,k)
    CALL wrf_dm_min_reals(ts_buf(:,:),grid%ts_qni_profile(:,:,k),grid%ts_buf_size*grid%max_ts_locs)
+   END DO
+
+   DO k=1,config_flags%num_bs_sfc_layers
+   ts_buf(:,:) = grid%ts_sfc_qi_profile(:,:,k)
+   CALL wrf_dm_min_reals(ts_buf(:,:),grid%ts_sfc_qi_profile(:,:,k),grid%ts_buf_size*grid%max_ts_locs)
+   END DO
+
+   DO k=1,config_flags%num_bs_sfc_layers
+   ts_buf(:,:) = grid%ts_sfc_qni_profile(:,:,k)
+   CALL wrf_dm_min_reals(ts_buf(:,:),grid%ts_sfc_qni_profile(:,:,k),grid%ts_buf_size*grid%max_ts_locs)
+   END DO
+
+   DO k=1,config_flags%num_bs_sfc_layers
+   ts_buf(:,:) = grid%ts_sfc_qd_profile(:,:,k)
+   CALL wrf_dm_min_reals(ts_buf(:,:),grid%ts_sfc_qd_profile(:,:,k),grid%ts_buf_size*grid%max_ts_locs)
+   END DO
+
+   DO k=1,config_flags%num_bs_sfc_layers
+   ts_buf(:,:) = grid%ts_sfc_nd_profile(:,:,k)
+   CALL wrf_dm_min_reals(ts_buf(:,:),grid%ts_sfc_nd_profile(:,:,k),grid%ts_buf_size*grid%max_ts_locs)
    END DO
 
 #endif         
@@ -781,6 +809,18 @@ SUBROUTINE write_ts( grid )
 
    ts_buf(:,:) = grid%ts_snd(:,:)
    CALL wrf_dm_min_reals(ts_buf(:,:),grid%ts_snd(:,:),grid%ts_buf_size*grid%max_ts_locs)
+
+   ts_buf(:,:) = grid%ts_hsalt(:,:)
+   CALL wrf_dm_min_reals(ts_buf(:,:),grid%ts_hsalt(:,:),grid%ts_buf_size*grid%max_ts_locs)
+
+   ts_buf(:,:) = grid%ts_q_lb(:,:)
+   CALL wrf_dm_min_reals(ts_buf(:,:),grid%ts_q_lb(:,:),grid%ts_buf_size*grid%max_ts_locs)
+
+   ts_buf(:,:) = grid%ts_N_lb(:,:)
+   CALL wrf_dm_min_reals(ts_buf(:,:),grid%ts_N_lb(:,:),grid%ts_buf_size*grid%max_ts_locs)
+
+   ts_buf(:,:) = grid%ts_uthresh(:,:)
+   CALL wrf_dm_min_reals(ts_buf(:,:),grid%ts_uthresh(:,:),grid%ts_buf_size*grid%max_ts_locs)
 
    IF ( model_config_rec%process_time_series == 2 ) THEN
       !!! Solar diagnostics
@@ -907,7 +947,11 @@ SUBROUTINE write_ts( grid )
                                  grid%ts_rainc(n,i),                        &
                                  grid%ts_rainnc(n,i),                       &
                                  grid%ts_clw(n,i),                          &
-                                 grid%ts_snd(n,i)
+                                 grid%ts_snd(n,i),                          &
+                                 grid%ts_hsalt(n,i),                        &
+                                 grid%ts_q_lb(n,i),                         &
+                                 grid%ts_N_lb(n,i),                         &
+                                 grid%ts_uthresh(n,i)
                ELSE
                   WRITE(UNIT=iunit,FMT='(i2,f13.6,i5,i5,i5,1x,14(f13.5,1x))')  &
                                  grid%id, grid%ts_hour(n,i),                &
@@ -949,6 +993,10 @@ SUBROUTINE write_ts( grid )
                                  grid%ts_rainc(n,i),                        &
                                  grid%ts_rainnc(n,i),                       &
                                  grid%ts_snd(n,i),                          &
+                                 grid%ts_hsalt(n,i),                        &
+                                 grid%ts_q_lb(n,i),                         &
+                                 grid%ts_N_lb(n,i),                         &
+                                 grid%ts_uthresh(n,i),                      &
                                  grid%ts_clw(n,i),                          &
                                  grid%ts_cldfrac2d(n,i),                    &
                                  grid%ts_wvp(n,i),                          &
@@ -1186,7 +1234,7 @@ SUBROUTINE write_ts( grid )
          IF (config_flags%sf_surface_physics == 18) THEN
             !Recreate filename for blowing snow mixing ratio
             k = LEN_TRIM(ts_profile_filename)
-            WRITE(ts_profile_filename(k-1:k),'(A2)') 'QD'
+            WRITE(ts_profile_filename(k-1:k),'(A2)') 'QS'
 
             OPEN(UNIT=iunit, FILE=TRIM(ts_profile_filename), STATUS='unknown', POSITION='append', FORM='formatted')
 
@@ -1194,7 +1242,7 @@ SUBROUTINE write_ts( grid )
                
                WRITE(UNIT=iunit,FMT=profile_format)  &
                               grid%ts_hour(n,i),             &
-                              grid%ts_qd_profile(n,i,1:grid%max_ts_level)
+                              grid%ts_qi_profile(n,i,1:grid%max_ts_level)
             END DO
             CLOSE(UNIT=iunit)
 
@@ -1206,7 +1254,7 @@ SUBROUTINE write_ts( grid )
                
             !Recreate filename for blowing snow number concentration
             k = LEN_TRIM(ts_profile_filename)
-            WRITE(ts_profile_filename(k-1:k),'(A2)') 'ND'
+            WRITE(ts_profile_filename(k-1:k),'(A2)') 'NS'
                
             OPEN(UNIT=iunit, FILE=TRIM(ts_profile_filename), STATUS='unknown', POSITION='append', FORM='formatted')
 
@@ -1214,11 +1262,11 @@ SUBROUTINE write_ts( grid )
                   
                WRITE(UNIT=iunit,FMT=profile_format)  &
                               grid%ts_hour(n,i),             &
-                              grid%ts_nd_profile(n,i,1:grid%max_ts_level)
+                              grid%ts_qni_profile(n,i,1:grid%max_ts_level)
             END DO
             CLOSE(UNIT=iunit)
 
-            !Write snow drift rate:mass (sfc_qi_drift) profile to separate file
+            !Write sfc snow mixing ratio :mass (sfc_qi_profile) profile to separate file
             iunit = get_unused_unit()
             IF ( iunit <= 0 ) THEN
                CALL wrf_error_fatal('Error in write_ts: could not find a free Fortran unit.')
@@ -1226,7 +1274,7 @@ SUBROUTINE write_ts( grid )
 
             !Recreate filename for snow drift rate
             k = LEN_TRIM(ts_profile_filename)
-            WRITE(ts_profile_filename(k-1:k),'(A2)') 'QS'
+            WRITE(ts_profile_filename(k-1:k),'(A2)') 'SQ'
             
             OPEN(UNIT=iunit, FILE=TRIM(ts_profile_filename), STATUS='unknown', POSITION='append', FORM='formatted')
 
@@ -1234,11 +1282,11 @@ SUBROUTINE write_ts( grid )
 
                WRITE(UNIT=iunit,FMT=profile_format)  &
                               grid%ts_hour(n,i),             &
-                              grid%ts_qi_profile(n,i,1:config_flags%num_bs_sfc_layers)
+                              grid%ts_sfc_qi_profile(n,i,1:config_flags%num_bs_sfc_layers)
             END DO
             CLOSE(UNIT=iunit)
 
-            !Write snow drift rate:number (sfc_qni_drift) profile to separate file
+            !Write sfc snow mixing ratio :number (sfc_qni_profile) profile to separate file
             iunit = get_unused_unit()
             IF ( iunit <= 0 ) THEN
                CALL wrf_error_fatal('Error in write_ts: could not find a free Fortran unit.')
@@ -1246,7 +1294,7 @@ SUBROUTINE write_ts( grid )
 
             !Recreate filename for snow drift rate
             k = LEN_TRIM(ts_profile_filename)
-            WRITE(ts_profile_filename(k-1:k),'(A2)') 'NS'
+            WRITE(ts_profile_filename(k-1:k),'(A2)') 'SN'
 
             OPEN(UNIT=iunit, FILE=TRIM(ts_profile_filename), STATUS='unknown', POSITION='append', FORM='formatted')
             
@@ -1254,9 +1302,62 @@ SUBROUTINE write_ts( grid )
                
                WRITE(UNIT=iunit,FMT=profile_format)  &
                               grid%ts_hour(n,i),             &
-                              grid%ts_qni_profile(n,i,1:config_flags%num_bs_sfc_layers)
+                              grid%ts_sfc_qni_profile(n,i,1:config_flags%num_bs_sfc_layers)
             END DO
             CLOSE(UNIT=iunit)
+
+
+            !Write sfc snow drift rate:number (sfc_qd_drift) profile to separate file
+            iunit = get_unused_unit()
+            IF ( iunit <= 0 ) THEN
+               CALL wrf_error_fatal('Error in write_ts: could not find a free Fortran unit.')
+            END IF
+
+            !Recreate filename for snow drift rate
+            k = LEN_TRIM(ts_profile_filename)
+            WRITE(ts_profile_filename(k-1:k),'(A2)') 'DQ'
+
+            OPEN(UNIT=iunit, FILE=TRIM(ts_profile_filename), STATUS='unknown', POSITION='append', FORM='formatted')
+            
+            DO n=1,grid%next_ts_time - 1
+               
+               WRITE(UNIT=iunit,FMT=profile_format)  &
+                              grid%ts_hour(n,i),             &
+                              grid%ts_sfc_qd_profile(n,i,1:config_flags%num_bs_sfc_layers)
+            END DO
+            CLOSE(UNIT=iunit)
+
+
+            !Write sfc snow drift rate:number (sfc_nd_drift) profile to separate file
+            iunit = get_unused_unit()
+            IF ( iunit <= 0 ) THEN
+               CALL wrf_error_fatal('Error in write_ts: could not find a free Fortran unit.')
+            END IF
+
+            !Recreate filename for snow drift rate
+            k = LEN_TRIM(ts_profile_filename)
+            WRITE(ts_profile_filename(k-1:k),'(A2)') 'DN'
+
+            OPEN(UNIT=iunit, FILE=TRIM(ts_profile_filename), STATUS='unknown', POSITION='append', FORM='formatted')
+            
+            DO n=1,grid%next_ts_time - 1
+               
+               WRITE(UNIT=iunit,FMT=profile_format)  &
+                              grid%ts_hour(n,i),             &
+                              grid%ts_sfc_nd_profile(n,i,1:config_flags%num_bs_sfc_layers)
+            END DO
+            CLOSE(UNIT=iunit)
+
+
+
+
+
+
+
+
+
+
+
          END IF
 
 #endif   
