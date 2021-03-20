@@ -95,7 +95,8 @@ class Cumsum {
                    SnowpackInterface();
                    int init_sn(int,double Lat,double Lon,double Altitude,double sn_tsk, double in_calc_step_length, int, 
 			       int, int, int, int,int,int,int,int,int,double*,double*,double*,double*,double*,double*,
-			       double*,double*,double*,double*,double*,double*,bool,double,double&, double&, double&, double&);
+			       double*,double*,double*,double*,double*,double*,double*,double*,bool,double,double&, 
+                               double&, double&, double&);
                    int nextStep(int,double,double,double,double,double,double&,double&,double&,double&,double&,double&,
                                 double,double,double,double&,double&,double&,double&,double&,double&,double&,
                                 double&, double&, double,double,double,double&, int, int, int, int, double,
@@ -104,7 +105,7 @@ class Cumsum {
                                 double&, double&, double&, double&, double&,
                                 double&, double&, double&, double&, double*,
 			        double*, double*, double*, double*, double*,
-                                double*, double*, double*, double*, double*,double*,bool,int&,double, 
+                                double*, double*, double*, double*, double*,double*,double*,double*,bool,int&,double, 
                                 double&, double&, double&, double&, double&, double&,double&,double&);
             private:
                    Snowpack* snowpack;

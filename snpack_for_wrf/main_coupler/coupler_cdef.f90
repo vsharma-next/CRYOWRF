@@ -17,7 +17,7 @@ interface
     function init_data_coupler_c(coupler,snpack_layers_to_save,a,b,c,d,e,f,g,i,j,yr,month,day,hour,minute,snpack_nlayers, &
 &                            arr_T,arr_thick,arr_volI,arr_volW, &
 &                            arr_volV,arr_rg,arr_rb,arr_dd,arr_sp,arr_cdot,arr_meta,&
-&                            arr_depd,start_from_file,wrf_rho,snowh,snow,snpack_dt,snpack_write_dt ) bind(C, name="init_data_coupler")
+&                            arr_depd,arr_graintype,arr_mk,start_from_file,wrf_rho,snowh,snow,snpack_dt,snpack_write_dt ) bind(C, name="init_data_coupler")
         use iso_c_binding
         implicit none
         real(c_double) :: init_data_coupler_c
@@ -38,7 +38,7 @@ interface
         integer(c_int), value :: snpack_layers_to_save
         real(c_double),dimension(snpack_layers_to_save) :: arr_T,arr_thick,arr_volI,arr_volW
         real(c_double),dimension(snpack_layers_to_save) :: arr_volV,arr_rg,arr_rb,arr_dd,arr_sp,arr_cdot,arr_meta
-        real(c_double),dimension(snpack_layers_to_save) :: arr_depd
+        real(c_double),dimension(snpack_layers_to_save) :: arr_depd,arr_graintype,arr_mk
         logical(c_bool),value :: start_from_file
         real(c_double) :: snowh,snow        
     end function
@@ -47,7 +47,7 @@ interface
 &                       d5,a7,a8,a9,b1,b2,b3,b4,b5,b6,b7,e1, &
 &                       e2,e3,e4,e5,f1,k1,k2,k3,k4,p1,n1,n2,n3,n4,n5,m1,m2,n6,n7,n8,n9,n10, &
 &                       n11,n12,n13,n14,arr_T,arr_thick,arr_volI,arr_volW, &
-&                       arr_volV,arr_rg,arr_rb,arr_dd,arr_sp,arr_cdot,arr_meta,arr_depd,bs_bool,gg1, & 
+&                       arr_volV,arr_rg,arr_rb,arr_dd,arr_sp,arr_cdot,arr_meta,arr_depd,arr_graintype,arr_mk,bs_bool,gg1, & 
 &                       wrf_rho,bs_bdg_total,qi_in,qni_in,bs_K,bs_mass_turb,bs_number_turb,in_hsalt,psi_s) bind(C, name="run_coupler")
         use iso_c_binding
         implicit none
@@ -87,6 +87,7 @@ interface
         real(c_double) :: m1,m2
         real(c_double) :: n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13,n14
         real(c_double),dimension(snpack_layers_to_save) :: arr_T,arr_thick,arr_volI,arr_volW,arr_depd
+        real(c_double),dimension(snpack_layers_to_save) :: arr_graintype,arr_mk
         real(c_double),dimension(snpack_layers_to_save) :: arr_volV,arr_rg,arr_rb,arr_dd,arr_sp,arr_cdot,arr_meta
         logical(c_bool),value :: bs_bool
         real(c_double) :: psi_s

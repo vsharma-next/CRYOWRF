@@ -570,7 +570,8 @@ SnowpackInterface::SnowpackInterface()
 int SnowpackInterface::init_sn(int snpack_layers_to_save,double Lat,double Lon,double Altitude,double sn_tsk,double in_calc_step_length, int f_counter, int grid_id, int I, int J,
                                int yr, int month, int day, int hour, int minute,int snpack_nlayers, double* arr_T,double* arr_thick,double* arr_volI,double* arr_volW, 
 			       double* arr_volV,double* arr_rg,double* arr_rb,double* arr_dd,double* arr_sp,double* arr_cdot,double* arr_meta,
-			       double* arr_depd, bool start_from_file, double wrf_rho, double& SNOWH, double& SNOW, double& snpack_dt, double& snpack_write_dt) 
+			       double* arr_depd,double* arr_graintype, double* arr_mk, bool start_from_file, double wrf_rho, double& SNOWH, 
+                               double& SNOW, double& snpack_dt, double& snpack_write_dt) 
 {
 
    //Constants::density_air = wrf_rho;
@@ -721,6 +722,7 @@ int SnowpackInterface::init_sn(int snpack_layers_to_save,double Lat,double Lon,d
                       vecSSdata.Ldata[ll].sp       = arr_sp[nLayers-1-ll]; 
                       vecSSdata.Ldata[ll].CDot     = arr_cdot[nLayers-1-ll]; 
                       vecSSdata.Ldata[ll].metamo   = arr_meta[nLayers-1-ll];
+                      vecSSdata.Ldata[ll].mk       = (unsigned short int) arr_mk[nLayers-1-ll];
                       vecSSdata.Ldata[ll].ne       = 1;
 		      //if( (I==1) && (J==31)) {
                       std::cout << "INIT SNPACK:\t" << I << "," << J << "," << vecSSdata.nLayers <<"," << vecSSdata.Ldata[ll].hl  << ","
@@ -801,7 +803,8 @@ int SnowpackInterface::nextStep(int xxx,double h_of_met_vals, double l_TA, doubl
                                 double& e_budg_ilwr_in,double& e_budg_ilwr_out,double& e_budg_sw_in, double& e_budg_sw_out,double& e_budg_sensible, 
                                 double& e_budg_latent, double& e_budg_lower_bc, double& e_budg_raine, double& e_budg_totale,double* arr_T,
 			        double* arr_thick,double* arr_volI,double* arr_volW, double* arr_volV,double* arr_rg,double* arr_rb,double* arr_dd,
-				double* arr_sp,double* arr_cdot,double* arr_meta,double* arr_depd,bool bs_bool, int& sn_nlayer, double wrf_rho, 
+				double* arr_sp,double* arr_cdot,double* arr_meta,double* arr_depd,double* arr_graintype,double* arr_mk,
+                                bool bs_bool, int& sn_nlayer, double wrf_rho, 
                                 double& bs_bdg_total,double& qi_in,double& qni_in,double& bs_K,double& bs_mass_turb,double& bs_number_turb,
                                 double& in_hsalt, double& psi_s)
 {
@@ -1143,6 +1146,10 @@ double v_check_mass = init_mass + surfFluxes.mass[SurfaceFluxes::MS_HNW]
             arr_meta[tmtm] = (double) elem_data[e].metamo ;
 
 	    arr_depd[tmtm] = (double) elem_data[e].depositionDate.getJulian();
+
+            arr_graintype[tmtm] = (double) elem_data[e].type ;
+            arr_mk[tmtm] = (double) elem_data[e].mk;
+
 
          }   
    }

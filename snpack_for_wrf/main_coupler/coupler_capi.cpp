@@ -22,10 +22,11 @@ int init_data_coupler(COUPLER* coupler,int snpack_layers_to_save,double Lat, dou
                   int f_counter, int in_grid, int I, int J,
                   int yr, int month, int day, int hour, int minute,int snpack_nlayers, double* arr_T,double* arr_thick,double* arr_volI,double* arr_volW,
                   double* arr_volV,double* arr_rg,double* arr_rb,double* arr_dd,double* arr_sp,double* arr_cdot,double* arr_meta,double* arr_depd,
-                  bool start_from_file,double wrf_rho, double& SNOWH, double& SNOW, double& snpack_dt,double& snpack_write_dt ){
+                  double* arr_graintype, double* arr_mk, bool start_from_file,double wrf_rho, 
+                  double& SNOWH, double& SNOW, double& snpack_dt,double& snpack_write_dt ){
     return coupler->init_sn(snpack_layers_to_save,Lat,Lon,Altitude,sn_tsk,in_calc_step_length,f_counter, in_grid, I, J,yr,month,day,hour,minute,
                         snpack_nlayers,arr_T,arr_thick,arr_volI,arr_volW,arr_volV,arr_rg,arr_rb,arr_dd,arr_sp,arr_cdot,
-			arr_meta,arr_depd,start_from_file,wrf_rho,SNOWH,SNOW,snpack_dt,snpack_write_dt);
+			arr_meta,arr_depd,arr_graintype,arr_mk,start_from_file,wrf_rho,SNOWH,SNOW,snpack_dt,snpack_write_dt);
 }
 
 int run_coupler(COUPLER* coupler,int xxx,double h_of_met_vals,double l_TA,double l_RH, double l_VW, 
@@ -40,8 +41,9 @@ int run_coupler(COUPLER* coupler,int xxx,double h_of_met_vals,double l_TA,double
             double& e_budg_ilwr_in,double& e_budg_ilwr_out,double& e_budg_sw_in, double& e_budg_sw_out,double& e_budg_sensible,   
             double& e_budg_latent, double& e_budg_lower_bc, double& e_budg_raine, double& e_budg_totale, double* arr_T,
 	    double* arr_thick,double* arr_volI,double* arr_volW,double* arr_volV,double* arr_rg,double* arr_rb,
-	    double* arr_dd,double* arr_sp,double* arr_cdot,double* arr_meta,double* arr_depd,bool bs_bool,int& sn_nlayer,
-            double wrf_rho, double& bs_bdg_total, double& qi_in, double& qni_in,double& bs_K, double& bs_mass_turb, 
+	    double* arr_dd,double* arr_sp,double* arr_cdot,double* arr_meta,double* arr_depd,double* arr_graintype, double* arr_mk,
+            bool bs_bool,int& sn_nlayer, double wrf_rho, double& bs_bdg_total, 
+            double& qi_in, double& qni_in,double& bs_K, double& bs_mass_turb, 
             double& bs_number_turb, double& in_hsalt, double& psi_s )
 {
 
@@ -53,6 +55,6 @@ int run_coupler(COUPLER* coupler,int xxx,double h_of_met_vals,double l_TA,double
             m_budg_melt,m_budg_refreeze,
             e_budg_ilwr_in,e_budg_ilwr_out,e_budg_sw_in, e_budg_sw_out,e_budg_sensible,   
             e_budg_latent, e_budg_lower_bc,e_budg_raine, e_budg_totale,arr_T,arr_thick,arr_volI,arr_volW,
-	    arr_volV,arr_rg,arr_rb,arr_dd,arr_sp,arr_cdot,arr_meta,arr_depd,bs_bool,sn_nlayer,wrf_rho,
+	    arr_volV,arr_rg,arr_rb,arr_dd,arr_sp,arr_cdot,arr_meta,arr_depd,arr_graintype,arr_mk,bs_bool,sn_nlayer,wrf_rho,
             bs_bdg_total,qi_in,qni_in,bs_K,bs_mass_turb,bs_number_turb,in_hsalt,psi_s );
 }

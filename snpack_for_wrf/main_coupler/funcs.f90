@@ -69,7 +69,7 @@ end subroutine initialize_f
 subroutine init_snowpack(grid_id,f_counter,snpack_layers_to_save,Lat,Lon,Altitude,sn_tsk,in_calc_step_length, &
 &                        loc_I,loc_J,yr,month,day,hour,minute,&
 &                        snpack_nlayers, arr_1,arr_2,arr_3,arr_4,arr_5,arr_6,arr_7,arr_8,arr_9,arr_10,&
-&                        arr_11,arr_12,start_from_file,wrf_rho,snowh,snow,snpack_dt,snpack_write_dt )
+&                        arr_11,arr_12,arr_13,arr_14,start_from_file,wrf_rho,snowh,snow,snpack_dt,snpack_write_dt )
 
 implicit none
 integer, intent(in) :: f_counter,grid_id,loc_I,loc_J
@@ -79,6 +79,8 @@ double precision,intent(in) :: Lat,Lon,Altitude,sn_tsk,in_calc_step_length
 integer, intent(in) :: snpack_layers_to_save
 double precision, intent(inout), dimension(snpack_layers_to_save) :: arr_1,arr_2,arr_3,arr_4,arr_5,arr_6
 double precision, intent(inout), dimension(snpack_layers_to_save) :: arr_7,arr_8,arr_9,arr_10,arr_11,arr_12
+double precision, intent(inout), dimension(snpack_layers_to_save) :: arr_13,arr_14
+
 logical,intent(in) :: start_from_file
 double precision, intent(inout) :: snowh,snow
 double precision, intent(inout) :: snpack_dt,snpack_write_dt
@@ -87,8 +89,8 @@ integer :: tmp
        tmp=global_f(grid_id)%p%f(f_counter)%init_data(snpack_layers_to_save,Lat,Lon,Altitude, &
 &                                sn_tsk,in_calc_step_length,f_counter,grid_id, &
 &                                loc_I,loc_J,yr,month,day,hour,minute,snpack_nlayers,arr_1,arr_2,arr_3,arr_4,arr_5, &
-&                                arr_6,arr_7,arr_8,arr_9,arr_10,arr_11,arr_12,start_from_file,wrf_rho,snowh,snow, &
-&                                snpack_dt,snpack_write_dt)
+&                                arr_6,arr_7,arr_8,arr_9,arr_10,arr_11,arr_12,arr_13,arr_14,start_from_file,wrf_rho, &
+&                                snowh,snow, snpack_dt,snpack_write_dt)
 
        write(*,*) 'ALLOCATED snowpack at ID,GRID:',grid_id,f_counter
 
@@ -98,7 +100,7 @@ subroutine run_code(grid_id,f_counter,snpack_layers_to_save,a1,a2,a3,a4,a5,a6,d1
 &                     a9,b1,b2,b3,b4,b5,b6,b7,e1,e2,e3,e4,e5,f1,k1,k2,p1,&
 &                     n1,n2,n3,n4,n5,m1,m2,n6,n7,n8,n9,n10,n11,n12,n13,n14,arr_1,arr_2,arr_3,arr_4,arr_5,&
 &                     arr_6,arr_7,arr_8,arr_9,arr_10,&
-&                     arr_11,arr_12,bs_bool,gg1,wrf_rho,bs_bdg_total,qi_in,qni_in,bs_K,bs_mass_turb, &
+&                     arr_11,arr_12,arr_13,arr_14,bs_bool,gg1,wrf_rho,bs_bdg_total,qi_in,qni_in,bs_K,bs_mass_turb, &
 &                     bs_number_turb,in_hsalt,psi_s)
 
 implicit none
@@ -116,6 +118,7 @@ double precision, intent(inout) :: m1,m2
 double precision, intent(inout) :: n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13,n14
 double precision, intent(inout), dimension(snpack_layers_to_save) :: arr_1,arr_2,arr_3,arr_4,arr_5,arr_6
 double precision, intent(inout), dimension(snpack_layers_to_save) :: arr_7,arr_8,arr_9,arr_10,arr_11,arr_12
+double precision, intent(inout), dimension(snpack_layers_to_save) :: arr_13,arr_14
 logical, intent(in) :: bs_bool
 integer, intent(in) :: k1,k2
 integer, intent(inout) :: gg1
@@ -129,7 +132,7 @@ double precision, intent(inout) :: in_hsalt,psi_s
 &                    e1,e2,e3,e4,e5,f1,f_counter,grid_id,k1,k2,p1, &
 &                    n1,n2,n3,n4,n5,m1,m2,n6,n7,n8,n9,n10,n11,n12,n13, &
 &                    n14,arr_1,arr_2,arr_3,arr_4,arr_5,arr_6, &
-&                    arr_7,arr_8,arr_9,arr_10,arr_11,arr_12,bs_bool,gg1,&
+&                    arr_7,arr_8,arr_9,arr_10,arr_11,arr_12,arr_13,arr_14,bs_bool,gg1,&
 &                    wrf_rho,bs_bdg_total,qi_in,qni_in,bs_K,bs_mass_turb, &
 &                    bs_number_turb,in_hsalt,psi_s)
 
