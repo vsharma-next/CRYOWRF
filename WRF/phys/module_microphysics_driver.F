@@ -3121,7 +3121,7 @@ real,dimension(ims:ime,snc_N,jms:jme), intent(inout) :: sn_qi_sublim3d
 
    mass_balance=0.0
    do k=1,bs_Ntot-1
-      mass_balance = mass_balance +  (bs_qi_loc(k)-qi_final(k))*0.5*(bs_dz(k)+bs_dz(k+1)) * bs_rho(i,k,j)
+      mass_balance = mass_balance +  (bs_qi_loc(k)-qi_final(k))*0.5*(bs_dz(k)+bs_dz(k+1)) * bs_rho(k)
    enddo
 
    if(abs(mass_balance) .lt. 1.0e-9) then
