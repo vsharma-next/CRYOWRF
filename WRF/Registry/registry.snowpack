@@ -121,11 +121,20 @@ halo      HALO_EM_BLOWINGSNOW dyn_em 48:in_drift,u_phy,v_phy,sfc_qi_drift,\
                                        sfc_qni_drift,sfc_u_angle,sfc_v_angle
 
 # Add blowing snow variables for timeseries output
-state    real   ts_snd          ?!       misc      -         -      -        "TS_SND"         "Snow drift"
-state    real   ts_qd_profile  ?!k       misc      -         -      -        "TS_QD_PROFILE"  "Blowing snow mixing ratio" "kg/kg"
-state    real   ts_nd_profile  ?!k       misc      -         -      -        "TS_ND_PROFILE"  "Blowing snow number concentration" "kg^-1"
-state    real   ts_qi_profile  ?!{snc_N} misc      -         -      -        "TS_SFCQI_PROFILE"  "snow drift mass" "kg m^-2 s-1"
-state    real   ts_qni_profile ?!{snc_N} misc      -         -      -        "TS_SFCQNI_PROFILE"  "snow drift number" "# m^-2 s-1"
+state    real   ts_snd          ?!       misc      -         -      -        "TS_SND"         "Snow drift" "kg m-1 s-1"
+state    real   ts_hsalt        ?!       misc      -         -      -        "TS_hsalt"       "saltation height" "m"
+state    real   ts_q_lb         ?!       misc      -         -      -        "TS_salt_q"      "saltation mass mixing ratio" "kg kg-1"
+state    real   ts_N_lb         ?!       misc      -         -      -        "TS_salt_N"      "saltation number mixing ratio" "# kg-1"
+state    real   ts_uthresh      ?!       misc      -         -      -        "TS_uthresh"     "threshold friction velocity"   "m s-1"
+
+state    real   ts_qi_profile  ?!k       misc      -         -      -        "TS_QI_PROFILE"  "Blowing snow mass mixing ratio" "kg kg-1"
+state    real   ts_qni_profile  ?!k       misc      -         -      -        "TS_QNI_PROFILE"  "Blowing snow number mixing ratio" "# kg-1"
+state    real   ts_sfc_qi_profile  ?!{snc_N} misc      -         -      -        "TS_SFCQI_PROFILE"  "Surface blowing snow mixing ratio" "kg kg-1"
+state    real   ts_sfc_qni_profile ?!{snc_N} misc      -         -      -        "TS_SFCQNI_PROFILE"  "Surface blowing snow number concentration" "# kg-1"
+state    real   ts_sfc_qd_profile  ?!{snc_N} misc      -         -      -        "TS_SFCQD_PROFILE"  "snow drift mass" "kg m^-2 s-1"
+state    real   ts_sfc_nd_profile  ?!{snc_N} misc      -         -      -        "TS_SFCND_PROFILE"  "snow drift number" "# m^-2 s-1"
+
+
 
 # Add snowpack mode
 rconfig  character snpack_mode namelist,physics 1 "none" rh "snowpack mode selection" "snowpack mode: antarctica, land" "character string"

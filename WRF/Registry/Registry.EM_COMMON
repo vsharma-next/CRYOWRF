@@ -363,7 +363,7 @@ i1       real   alpha          ikj     dyn_em      1         -
 i1       real   a              ikj     dyn_em      1         -                                                  
 i1       real   gamma          ikj     dyn_em      1         -                                                  
 i1       real   c2a            ikj     dyn_em      1         -     -
-state    real   rho            ikj      misc       1         -     r      "RHO"              "DENSITY"         "Kg m-3"
+state    real   rho            ikj      misc       1         -     irh      "RHO"              "DENSITY"         "Kg m-3"
 i1       real   phm            ikj     dyn_em      1         -     -
 i1       real   cqu            ikj     dyn_em      1         -     -
 i1       real   cqv            ikj     dyn_em      1         -     -
@@ -1844,8 +1844,8 @@ state    real   snopcx         ij      dyn_em      1         -       r        "s
 state    real   soiltb         ij      dyn_em      1         -       r        "soiltb" "bottom soil temperature" "K"
                                                 
 state integer  STEPBL          -        misc        1         -      r        "STEPBL"                "NUMBER OF FUNDAMENTAL TIMESTEPS BETWEEN PBL CALLS" ""      
-state    real  taucldi         ikj      misc        1         -      r        "TAUCLDI"               "CLOUD OPTICAL THICKNESS FOR ICE"              ""
-state    real  taucldc         ikj      misc        1         -      r        "TAUCLDC"               "CLOUD OPTICAL THICKNESS FOR WATER"            ""
+state    real  taucldi         ikj      misc        1         -      irh      "TAUCLDI"               "CLOUD OPTICAL THICKNESS FOR ICE"              ""
+state    real  taucldc         ikj      misc        1         -      irh      "TAUCLDC"               "CLOUD OPTICAL THICKNESS FOR WATER"            ""
 state   real  defor11          ikj      misc        1         -     r         "defor11"               "DEFORMATION 11"              "s-1"      
 state   real  defor22          ikj      misc        1         -     r         "defor22"               "DEFORMATION 22"              "s-1"      
 state   real  defor12          ikj      misc        1         -     r         "defor12"               "DEFORMATION 12"              "s-1"      
