@@ -44,7 +44,8 @@ int run_coupler(COUPLER* coupler,int xxx,double h_of_met_vals,double l_TA,double
 	    double* arr_dd,double* arr_sp,double* arr_cdot,double* arr_meta,double* arr_depd,double* arr_graintype, double* arr_mk,
             bool bs_bool,int& sn_nlayer, double wrf_rho, double& bs_bdg_total, 
             double& qi_in, double& qni_in,double& bs_K, double& bs_mass_turb, 
-            double& bs_number_turb, double& in_hsalt, double& psi_s )
+            double& bs_number_turb, double& in_hsalt, double& psi_s, double loc_sza,double tau_qc,double tau_qi,
+            double tau_qc_tot, double tau_qi_tot )
 {
 
 //     cout << "C API, run the model" << endl;
@@ -56,5 +57,6 @@ int run_coupler(COUPLER* coupler,int xxx,double h_of_met_vals,double l_TA,double
             e_budg_ilwr_in,e_budg_ilwr_out,e_budg_sw_in, e_budg_sw_out,e_budg_sensible,   
             e_budg_latent, e_budg_lower_bc,e_budg_raine, e_budg_totale,arr_T,arr_thick,arr_volI,arr_volW,
 	    arr_volV,arr_rg,arr_rb,arr_dd,arr_sp,arr_cdot,arr_meta,arr_depd,arr_graintype,arr_mk,bs_bool,sn_nlayer,wrf_rho,
-            bs_bdg_total,qi_in,qni_in,bs_K,bs_mass_turb,bs_number_turb,in_hsalt,psi_s );
+            bs_bdg_total,qi_in,qni_in,bs_K,bs_mass_turb,bs_number_turb,in_hsalt,psi_s,loc_sza,tau_qc,tau_qi,tau_qc_tot,
+            tau_qi_tot );
 }

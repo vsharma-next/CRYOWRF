@@ -806,7 +806,8 @@ int SnowpackInterface::nextStep(int xxx,double h_of_met_vals, double l_TA, doubl
 				double* arr_sp,double* arr_cdot,double* arr_meta,double* arr_depd,double* arr_graintype,double* arr_mk,
                                 bool bs_bool, int& sn_nlayer, double wrf_rho, 
                                 double& bs_bdg_total,double& qi_in,double& qni_in,double& bs_K,double& bs_mass_turb,double& bs_number_turb,
-                                double& in_hsalt, double& psi_s)
+                                double& in_hsalt, double& psi_s, double loc_sza, double tau_qc, double tau_qi, 
+                                double tau_qc_tot, double tau_qi_tot )
 {
 
     vecXdata.meltMassTot = 0.0;
@@ -1041,6 +1042,11 @@ surfFluxes.mass[SurfaceFluxes::MS_HNW] = Mdata.solid_psum;
 
 surfFluxes.reset(cumsum_mass);
 cumsum.precip += l_psum;
+
+// NEW EDITS to account 
+Mdata.elev = (90.0 - loc_sza) * (3.141628 / 180.0);
+Mdata.odc = tau_qc_tot + tau_qi_tot;
+
                              if( (counter % compute_counter) == 0) {
                                 snowpack->runSnowpackModel(Mdata, vecXdata, cumsum.precip, sn_Bdata, surfFluxes);
                                 }

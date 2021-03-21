@@ -16,7 +16,7 @@ int run_coupler(COUPLER* coupler, int, double, double, double, double, double, d
             double&,double&,double&,double&,double&,double&,double&,double&, double&, double, double, double, double&, int, int, int, int, double,
             double&,double&,double&,double&,double&,double&,double&,double&,double&,double&,double&,double&,double&,double&,double&,double&,double*,
 	    double*,double*,double*,double*,double*,double*,double*,double*,double*,double*,double*,double*,double*,bool,int&,double, 
-            double&, double&, double&, double&, double&, double&, double&,double&);
+            double&, double&, double&, double&, double&, double&, double&,double&,double, double, double, double, double);
 #ifdef __cplusplus
 }
 #endif

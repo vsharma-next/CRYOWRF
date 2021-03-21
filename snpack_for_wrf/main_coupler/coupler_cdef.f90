@@ -48,7 +48,8 @@ interface
 &                       e2,e3,e4,e5,f1,k1,k2,k3,k4,p1,n1,n2,n3,n4,n5,m1,m2,n6,n7,n8,n9,n10, &
 &                       n11,n12,n13,n14,arr_T,arr_thick,arr_volI,arr_volW, &
 &                       arr_volV,arr_rg,arr_rb,arr_dd,arr_sp,arr_cdot,arr_meta,arr_depd,arr_graintype,arr_mk,bs_bool,gg1, & 
-&                       wrf_rho,bs_bdg_total,qi_in,qni_in,bs_K,bs_mass_turb,bs_number_turb,in_hsalt,psi_s) bind(C, name="run_coupler")
+&                       wrf_rho,bs_bdg_total,qi_in,qni_in,bs_K,bs_mass_turb,bs_number_turb,in_hsalt,psi_s, &
+&                       loc_sza,tau_qc,tau_qi,tau_qc_tot,tau_qi_tot    ) bind(C, name="run_coupler")
         use iso_c_binding
         implicit none
         integer(c_int),value :: snpack_layers_to_save
@@ -91,5 +92,6 @@ interface
         real(c_double),dimension(snpack_layers_to_save) :: arr_volV,arr_rg,arr_rb,arr_dd,arr_sp,arr_cdot,arr_meta
         logical(c_bool),value :: bs_bool
         real(c_double) :: psi_s
+        real(c_double),value :: loc_sza,tau_qc,tau_qi,tau_qc_tot,tau_qi_tot
     end function
 end interface

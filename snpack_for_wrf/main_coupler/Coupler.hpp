@@ -106,7 +106,8 @@ class Cumsum {
                                 double&, double&, double&, double&, double*,
 			        double*, double*, double*, double*, double*,
                                 double*, double*, double*, double*, double*,double*,double*,double*,bool,int&,double, 
-                                double&, double&, double&, double&, double&, double&,double&,double&);
+                                double&, double&, double&, double&, double&, double&,double&,double&, 
+                                double, double, double, double, double);
             private:
                    Snowpack* snowpack;
                    SnowpackConfig cfg;

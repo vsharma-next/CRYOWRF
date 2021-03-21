@@ -101,7 +101,7 @@ subroutine run_code(grid_id,f_counter,snpack_layers_to_save,a1,a2,a3,a4,a5,a6,d1
 &                     n1,n2,n3,n4,n5,m1,m2,n6,n7,n8,n9,n10,n11,n12,n13,n14,arr_1,arr_2,arr_3,arr_4,arr_5,&
 &                     arr_6,arr_7,arr_8,arr_9,arr_10,&
 &                     arr_11,arr_12,arr_13,arr_14,bs_bool,gg1,wrf_rho,bs_bdg_total,qi_in,qni_in,bs_K,bs_mass_turb, &
-&                     bs_number_turb,in_hsalt,psi_s)
+&                     bs_number_turb,in_hsalt,psi_s,loc_sza,tau_qc,tau_qi,tau_qc_tot,tau_qi_tot)
 
 implicit none
 integer, intent(in) :: f_counter,grid_id
@@ -125,7 +125,7 @@ integer, intent(inout) :: gg1
 integer :: tmp
 double precision, intent(inout) :: bs_bdg_total,qi_in,qni_in,bs_K,bs_mass_turb,bs_number_turb
 double precision, intent(inout) :: in_hsalt,psi_s
-
+double precision, intent(in) :: loc_sza,tau_qc,tau_qi,tau_qc_tot,tau_qi_tot
 !       write(*,*) 'INSIDE FUNCS: ',a1,a2,a3,a4,a5,a6,a7,a8,a9
        tmp=global_f(grid_id)%p%f(f_counter)%run(snpack_layers_to_save,a1,a2,a3,a4,a5,a6, &
 &                    d1,d2,d3,d4,d5,a7,a8,a9,b1,b2,b3,b4,b5,b6,b7, &
@@ -134,7 +134,7 @@ double precision, intent(inout) :: in_hsalt,psi_s
 &                    n14,arr_1,arr_2,arr_3,arr_4,arr_5,arr_6, &
 &                    arr_7,arr_8,arr_9,arr_10,arr_11,arr_12,arr_13,arr_14,bs_bool,gg1,&
 &                    wrf_rho,bs_bdg_total,qi_in,qni_in,bs_K,bs_mass_turb, &
-&                    bs_number_turb,in_hsalt,psi_s)
+&                    bs_number_turb,in_hsalt,psi_s, loc_sza,tau_qc,tau_qi,tau_qc_tot,tau_qi_tot)
 
 end subroutine
 
