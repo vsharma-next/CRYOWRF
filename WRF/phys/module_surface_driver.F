@@ -301,7 +301,8 @@ CONTAINS
      &          ,sn_graintype,sn_mk, bs_bool,sn_nlayers,snc_Z,snc_N,snpack_layers_to_save,sn_qs,sn_ns,sfc_T,sfc_Q,sfc_RH,sfc_SQ,sfc_SN & 
      &          ,sfc_meanR,sfc_SQ_HFX ,sfc_SQ_QFX,corr_q_for_rad &
      &          ,corr_N_for_rad,exch_h,bs_qi,bs_qni,in_hsalt,global_bs_bdg_div,global_bs_bdg_xch,sfc_qi_drift,sfc_qni_drift &
-     &          ,sfc_u_angle,sfc_v_angle, bs_sfc_qi_advt,bs_sfc_qni_advt,snpack_dt,snpack_write_dt,snpack_psi_s )
+     &          ,sfc_u_angle,sfc_v_angle, bs_sfc_qi_advt,bs_sfc_qni_advt,snpack_dt,snpack_write_dt,snpack_psi_s &
+     &          ,loc_sza,tau_qc,tau_qi,tau_qc_tot,tau_qi_tot )
                                                   
 
 #if ( ! NMM_CORE == 1 )
@@ -1461,6 +1462,10 @@ CONTAINS
    real,dimension(ims:ime,jms:jme) :: Q2_snpack,T2_snpack
    real,dimension(ims:ime,jms:jme) :: U10_snpack,V10_snpack
    real,intent(in) :: snpack_dt,snpack_write_dt
+
+   real,dimension(ims:ime,jms:jme), intent(in) :: loc_sza,tau_qc,tau_qi,tau_qc_tot,tau_qi_tot
+
+
    character*256 :: snpack_mode
    
    call nl_get_snpack_mode(1,snpack_mode)
@@ -3113,7 +3118,8 @@ CONTAINS
                             bs_qni,in_hsalt,global_bs_bdg_div,global_bs_bdg_xch,sfc_qi_drift,sfc_qni_drift,       &
                             sfc_u_angle,sfc_v_angle,bs_sfc_qi_advt,bs_sfc_qni_advt,snpack_dt,snpack_write_dt,  &
                             NUM_SOIL_LAYERS,SMOIS,TSLB,SH2O,snpack_layers_to_save,snpack_psi_s, &
-                            Q2_snpack,T2_snpack,U10_snpack,V10_snpack,UST)
+                            Q2_snpack,T2_snpack,U10_snpack,V10_snpack,UST,loc_sza,tau_qc, & 
+                            tau_qi,tau_qc_tot,tau_qi_tot)
 
 
             !!! CALL TO SEAICE_NOAH to deal with sea_ice points

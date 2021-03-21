@@ -30,7 +30,7 @@ CONTAINS
                corr_q_for_rad,corr_N_for_rad,exch_h,bs_qi,bs_qni,in_hsalt,global_bs_bdg_div,global_bs_bdg_xch, &
                sfc_qi_drift,sfc_qni_drift,sfc_u_angle,sfc_v_angle,bs_sfc_qi_advt,bs_sfc_qni_advt,snpack_dt, &
                snpack_write_dt,NSOIL,SMOIS,TSLB,SH2O,snpack_layers_to_save,snpack_psi_s,Q2_snpack,T2_snpack, &
-               U10_snpack,V10_snpack,UST_V)
+               U10_snpack,V10_snpack,UST_V,loc_sza,tau_qc,tau_qi,tau_qc_tot,tau_qi_tot)
 !----------------------------------------------------------------
 !!! ADDED FOR BLOWING SNOW ADVECTION    
     USE module_dm        , ONLY : ntasks_x,ntasks_y,local_communicator,mytask,ntasks
@@ -98,6 +98,9 @@ CONTAINS
 
     REAL,    DIMENSION( ims:ime,          jms:jme ), INTENT(INOUT) ::  in_drift,in_conc,in_csalt,in_q_lb,in_N_lb,in_bs_m_exch
     REAL,    DIMENSION( ims:ime,          jms:jme ), INTENT(INOUT) ::  ice_fluxq, ice_fluxN, UST_V
+
+    real,    dimension( ims:ime,          jms:jme ), intent(in) :: loc_sza,tau_qc,tau_qi,tau_qc_tot,tau_qi_tot
+
    real, optional, dimension(ims:ime,jms:jme),intent(inout) :: m_budg_precip,m_budg_erosion,m_budg_sublim,m_budg_deposit,m_budg_swe
    real, optional, dimension(ims:ime,jms:jme),intent(inout) :: m_budg_melt,m_budg_refreeze 
    real, optional, dimension(ims:ime,jms:jme),intent(inout) :: e_budg_lw_in,e_budg_lw_out,e_budg_sw_in,e_budg_sw_out,e_budg_sensib
@@ -289,6 +292,8 @@ CONTAINS
     real :: divQx, divQy,tmp_divQ
     double precision :: l_in_hsalt
     double precision :: l_psi_s
+    double precision :: l_loc_sza, l_tau_qc, l_tau_qi
+    double precision :: l_tau_qc_tot, l_tau_qi_tot
     real, dimension(ims:ime,snc_N,jms:jme)  :: U_SFC,V_SFC,VW_SFC
     real, dimension(ims:ime,jms:jme),intent(inout) :: sfc_u_angle,sfc_v_angle
     real, dimension(ims:ime,snc_N,jms:jme),intent(inout) :: sfc_qi_drift,sfc_qni_drift
@@ -528,6 +533,13 @@ enddo
        l_in_N_corr           = real(ice_fluxN(I,J),8) 
 
 
+       l_loc_sza = real(loc_sza(I,J),8)
+       l_tau_qc = real(tau_qc(I,J),8)
+       l_tau_qi = real(tau_qi(I,J),8)
+       l_tau_qc_tot = real(tau_qc_tot(I,J),8)
+       l_tau_qi_tot = real(tau_qi_tot(I,J),8)
+
+
        DZ8W1D = DZ8W (I,1,J)                          ! thickness of atmospheric layers
 
       !!!! snpack-ANTARCTICA: HERE THE CODE SPLITS BETWEEN LAND WITH ICE (isltyp==8) AND LAND WITHOUT ICE
@@ -625,7 +637,8 @@ enddo
   &                          l_ebug_low_bc,l_ebug_raine,l_ebug_totale,arr_T,arr_thick,arr_volI,arr_volW, &
   &                          arr_volV,arr_rg,arr_rb,arr_dd,arr_sp,arr_cdot,arr_meta,arr_depd,arr_graintype,arr_mk,bs_bool, &
   &                          l_sn_nlayers,l_rho_v, l_bs_bdg_total, qi_in, qni_in,bs_K, bs_mass_turb,    &
-  &                          bs_number_turb,l_in_hsalt,l_psi_s )
+  &                          bs_number_turb,l_in_hsalt,l_psi_s, l_loc_sza,l_tau_qc,l_tau_qi, &
+  &                          l_tau_qc_tot,l_tau_qi_tot )
 
     UST_V(I,J)    = real(in_UST,4)
     in_hsalt(I,J) = real(l_in_hsalt,4)
