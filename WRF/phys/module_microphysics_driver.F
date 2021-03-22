@@ -822,7 +822,7 @@ real,dimension(ims:ime,snc_N,jms:jme), intent(inout) :: sn_qi_sublim3d
                &            ,i_start(ij),i_end(ij),j_start(ij),j_end(ij),kts,kte                                   &
                &            ,exch_h,z,pi_phy,th,dz8w,qv_curr,P,RHO,tsk,in_q_lb,in_N_lb & 
                &            ,in_bs_sedi,ht,dt,itimestep,bool_snow_sublimation,bs_rad_effect &
-               &            ,in_hsalt,bs_sublim,xkhv_LES,bs_qi_sublim3d,sn_qi_sublim3d    )
+               &            ,in_hsalt,bs_sublim,xkhv_LES,bs_qi_sublim3d,sn_qi_sublim3d,w   )
             enddo
             !$OMP END PARALLEL DO
    endif
@@ -1397,7 +1397,7 @@ real,dimension(ims:ime,snc_N,jms:jme), intent(inout) :: sn_qi_sublim3d
                  ,EVAPPROD=evapprod,RAINPROD=rainprod               &
 #endif
                  ,PRECR=precr,PRECI=preci,PRECS=precs,PRECG=precg   & ! jdf for wrf-chem
-                                                                    )
+                                )
         ELSE
            Call wrf_error_fatal( 'arguments not present for calling morrison two moment')
         ENDIF
@@ -2871,7 +2871,7 @@ real,dimension(ims:ime,snc_N,jms:jme), intent(inout) :: sn_qi_sublim3d
                &            ,z_at_half,PII,TH,DZ,QV,P,RHO,tsk,in_q_lb,in_N_lb           &
                &            ,in_bs_sedi,altitude,DT_IN,itimestep,bool_snow_sublimation  &
                &            ,bs_rad_effect,in_hsalt, bs_sublim, xkhv_LES, bs_qi_sublim3d &
-               &            ,sn_qi_sublim3d   )
+               &            ,sn_qi_sublim3d, w   )
 
    IMPLICIT NONE
 
@@ -2892,6 +2892,8 @@ real,dimension(ims:ime,snc_N,jms:jme), intent(inout) :: sn_qi_sublim3d
    real,dimension(ims:ime,kms:kme,jms:jme), intent(inout) :: TH,QV
    real,dimension(ims:ime,kms:kme,jms:jme), intent(in) :: z_at_half
    real,dimension(ims:ime,kms:kme,jms:jme), intent(in) :: xkhv_LES
+
+   real,dimension(ims:ime,kms:kme,jms:jme), intent(in) :: w  
 
    real,dimension(ims:ime,jms:jme), intent(in) :: tsk,in_q_lb,in_N_lb
    real,dimension(ims:ime,jms:jme), intent(inout) :: in_bs_sedi
@@ -2922,6 +2924,7 @@ real,dimension(ims:ime,snc_N,jms:jme), intent(inout) :: sn_qi_sublim3d
     real,dimension(snc_N+kte-kts+1)   :: VQ,VN,loc_sfc_meanR
     real,dimension(snc_N+kte-kts+1)   :: mat_a,mat_b,mat_c,mat_d,qi_final,qni_final
     real,dimension(snc_N+kte-kts+1)   :: qv_corr,t_corr,lsub
+    real,dimension(snc_N+kte-kts+1)   :: loc_w
     real                      :: tmp_real, sfc_qv, loc_qsat, loc_bs_RH,tmp_SN,tmp_SQ
     real,parameter            :: alpha = 3.0 ! parameter for blowing snow distribution
     real                      :: gamma_alpha3,gamma_alpha,gamma_alpha_ratio
@@ -2994,6 +2997,8 @@ real,dimension(ims:ime,snc_N,jms:jme), intent(inout) :: sn_qi_sublim3d
     VN = 0.
     bs_qi_rad_loc  = 0.
     bs_qni_rad_loc = 0.
+    loc_w = 0.
+
 !!!! BUILDING THE HEIGHT ARRAY FOR GRID POINT I,J
 
 !!! bs_Z is the height of the "U" levels for all the blowing snow points including surface layer points
@@ -3019,6 +3024,10 @@ real,dimension(ims:ime,snc_N,jms:jme), intent(inout) :: sn_qi_sublim3d
 
     bs_Kmix(snc_N+2 : bs_Ntot)    =  exch_h(I,2:kte,J) !xkhv_LES(I,2:kte,J) !exch_h(I,2 : kte,J)
     bs_Kmix(1 : snc_N+1)          =  bs_Kmix(snc_N+2) * bs_zm_sfclayer(1 : snc_N+1) / DZ(i,1,j)
+
+!!! constructing vertical velocity
+    loc_w(snc_N+1 : bs_Ntot) = 0.0
+    loc_w(1 : snc_N) = w(I,1,J) + (w(I,2,J) - w(I,1,J)) * (bs_Z(1:snc_N)/DZ(i,1,j))
 
 !!! RECONSTRUCTING FULL BLOWING SNOW ARRAY from sn_qn ( surface layer blowing snow ) and bs_qi (all atmosphere blowing snow)
 
@@ -3068,14 +3077,14 @@ real,dimension(ims:ime,snc_N,jms:jme), intent(inout) :: sn_qi_sublim3d
 
             eta = a_loc * dyn_vis * (g ** (b_loc)) / 1.0
 
-            VN(k) = eta * (gamma(3.0*b_loc-1.0+alpha)/gamma_alpha) * (lambda**(1.0-3.0*b_loc))
+            VN(k) = eta * (gamma(3.0*b_loc-1.0+alpha)/gamma_alpha) * (lambda**(1.0-3.0*b_loc)) - loc_w(k)
 
-            VQ(k) = eta * (gamma(3.0*b_loc+2.0+alpha)) * ((lambda**(1.0-3.0*b_loc)) / gamma_alpha3)
+            VQ(k) = eta * (gamma(3.0*b_loc+2.0+alpha)) * ((lambda**(1.0-3.0*b_loc)) / gamma_alpha3) - loc_w(k)
 
             loc_sfc_meanR(k) = alpha / (2.0 * lambda)
         else
-            VN(k) = 1.0
-            VQ(k) = 1.0
+            VN(k) = 0.001
+            VQ(k) = 0.001
         endif
            
     enddo
