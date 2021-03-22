@@ -2422,8 +2422,8 @@ SUBROUTINE open_hist_w ( grid , config_flags, stream, alarm_id, &
 ! RASM Climate Diagnostics - JR, AS, MS  - October 2016
 !----------------------------------------------------------------------
    IF( alarm_id .EQ. AUXHIST5_ALARM .AND. config_flags%mean_diag .EQ. 1 ) THEN
-      WRITE(message, *) "RASM STATS: MEAN AUXHIST5 oid=", oid, " fname=", trim(fname), " alarmI_id=", alarm_id, " Time_outNow=", timestr
-      CALL wrf_debug(200,  message )
+!      WRITE(message, *) "RASM STATS: MEAN AUXHIST5 oid=", oid, " fname=", trim(fname), " alarmI_id=", alarm_id, " Time_outNow=", timestr
+!      CALL wrf_debug(200,  message )
       WRITE(message, *) "RASM STATS: MEAN AUXHIST5 Time_outbefore =...", trim(grid%OUTDATE_MEAN)
       CALL wrf_debug(200,  message )
       timestr = grid%OUTDATE_MEAN  

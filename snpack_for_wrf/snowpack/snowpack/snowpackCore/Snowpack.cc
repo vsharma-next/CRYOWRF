@@ -1757,16 +1757,18 @@ void Snowpack::compSnowFall_simple(CurrentMeteo& Mdata, SnowStation& Xdata)
          const size_t nOldE = Xdata.getNumberOfElements(); //Old number of elements
 	 const double cos_sl = Xdata.cos_sl; //slope cosinus
          double rho_hn ; 
-         rho_hn = SnLaws::compNewSnowDensity(hn_density, hn_density_parameterization, hn_density_fixedValue,
-                                                 Mdata, Xdata, t_surf, variant);
         
          if (variant == "ANTARCTICA") {
                rho_hn = 300.0;
            }
+         else{
+         rho_hn = SnLaws::compNewSnowDensity(hn_density, hn_density_parameterization, hn_density_fixedValue,
+                                                 Mdata, Xdata, t_surf, variant);
+            }
 
          delta_cH = Mdata.solid_psum / rho_hn ;  
 
-         std::cout << "WHAT: " << delta_cH << "," << rho_hn << "," << height_new_elem << "," << Mdata.solid_psum << std::endl;
+         //std::cout << "WHAT: " << delta_cH << "," << rho_hn << "," << height_new_elem << "," << Mdata.solid_psum << std::endl;
 
          if ( (delta_cH >= height_new_elem) || force_add_snowfall ) {
             add_element = true;     
@@ -1906,7 +1908,7 @@ void Snowpack::compSnowFall_simple(CurrentMeteo& Mdata, SnowStation& Xdata)
 
                        const int loc_I = Xdata.meta.position.getGridI();
                        const int loc_J = Xdata.meta.position.getGridJ();
-                       std::cout << " Thin layer on snow :\t" << I << "," << J << "," << loc_elems << "," << Xdata.SoilNode << std::endl;
+                       //std::cout << " Thin layer on snow :\t" << I << "," << J << "," << loc_elems << "," << Xdata.SoilNode << std::endl;
                     }
                  else{
                     size_t nRemove = 1;
@@ -1916,7 +1918,7 @@ void Snowpack::compSnowFall_simple(CurrentMeteo& Mdata, SnowStation& Xdata)
                     loc_elems = Xdata.getNumberOfElements();
                     const int loc_I = Xdata.meta.position.getGridI();
                     const int loc_J = Xdata.meta.position.getGridJ();
-                    std::cout << "Thin layer on soil :\t" << I << "," << J << "," << loc_elems << "," << Xdata.SoilNode << std::endl;
+                    //std::cout << "Thin layer on soil :\t" << I << "," << J << "," << loc_elems << "," << Xdata.SoilNode << std::endl;
                  }               
             }
 

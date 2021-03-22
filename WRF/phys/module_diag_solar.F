@@ -53,6 +53,10 @@ CONTAINS
      INTEGER, INTENT(IN) :: ids, ide, jds, jde, kds, kde, ims, ime, jms, jme, kms, kme, &
              ips, ipe, jps, jpe, kps, kpe, kts, kte, num_tiles
      INTEGER, DIMENSION(num_tiles), INTENT(IN) :: i_start, i_end, j_start, j_end
+
+     real,dimension(ims:ime,kms:kme,jms:jme) :: tmp_re_cloud,tmp_re_ice
+     integer :: tmp_has_reqc,tmp_has_reqi
+
  
      INTEGER :: i, j, k, its, ite, jts, jte, ij
      REAL    :: pmw, swp, iwp, lwp, q_aux, wc
@@ -66,6 +70,19 @@ CONTAINS
      REAL, DIMENSION(kms:kme) :: rhodz
      INTEGER, PARAMETER :: TAU_ICE_METHOD = 1
      INTEGER, PARAMETER :: I_TO_PLOT = 299, J_TO_PLOT = 84
+
+
+     if(has_reqc .ne. 1) then
+          tmp_re_cloud = 10.e-6
+          tmp_re_ice = 30.e-6
+          tmp_has_reqc = 1
+          tmp_has_reqi = 1
+     else
+          tmp_re_cloud = re_cloud
+          tmp_re_ice = re_ice
+          tmp_has_reqc = has_reqc
+          tmp_has_reqi = has_reqi
+     endif
 
 !      !$OMP PARALLEL DO   &
 !      !$OMP PRIVATE ( ij )
@@ -108,11 +125,11 @@ CONTAINS
                lwp = q_aux
                lwp2d(i, j) = SIGN( MAX( lwp, 0.0 ), 1.0 )
 
-               if (has_reqc == 1) then
+               if (tmp_has_reqc == 1) then
                    ! Calc effective radius water
                  if (q_aux > Q_MIN) then
                    re_cloud_path(i, j) = integrate_2var (rhodz, qc(i, :, j), &
-                       re_cloud(i, :, j), kms, kme, kts, kte)
+                       tmp_re_cloud(i, :, j), kms, kme, kts, kte)
                    re_cloud_path(i, j) = re_cloud_path(i, j) / q_aux
                  else
                    re_cloud_path(i, j) = 0.0
@@ -135,11 +152,11 @@ CONTAINS
                lwp = q_aux
                lwp2d_tot(i, j) = SIGN( MAX( lwp, 0.0 ), 1.0 )
 
-               if (has_reqc == 1) then
+               if (tmp_has_reqc == 1) then
                    ! Calc effective radius water
                  if (q_aux > Q_MIN) then
                    re_cloud_path_tot(i, j) = integrate_2var (rhodz, qc_tot(i, :, j), &
-                       re_cloud(i, :, j), kms, kme, kts, kte)
+                       tmp_re_cloud(i, :, j), kms, kme, kts, kte)
                    re_cloud_path_tot(i, j) = re_cloud_path_tot(i, j) / q_aux
                  else
                    re_cloud_path_tot(i, j) = 0.0
@@ -165,11 +182,11 @@ CONTAINS
                iwp = q_aux
                iwp2d(i, j) = SIGN( MAX( iwp, 0.0 ), 1.0 )
 
-               if (has_reqi == 1) then
+               if (tmp_has_reqi == 1) then
                    ! Calc effective radius ice
                  if (q_aux > Q_MIN) then
                    re_ice_path(i, j) = integrate_2var (rhodz, qi(i, :, j), &
-                       re_ice(i, :, j), kms, kme, kts, kte)
+                       tmp_re_ice(i, :, j), kms, kme, kts, kte)
                    re_ice_path(i, j) = re_ice_path(i, j) / q_aux
                  else
                    re_ice_path(i, j) = 0.0
@@ -197,11 +214,11 @@ CONTAINS
                iwp = q_aux
                iwp2d_tot(i, j) = SIGN( MAX( iwp, 0.0 ), 1.0 )
 
-               if (has_reqi == 1) then
+               if (tmp_has_reqi == 1) then
                    ! Calc effective radius ice
                  if (q_aux > Q_MIN) then
                    re_ice_path_tot(i, j) = integrate_2var (rhodz, qi_tot(i, :, j), &
-                       re_ice(i, :, j), kms, kme, kts, kte)
+                       tmp_re_ice(i, :, j), kms, kme, kts, kte)
                    re_ice_path_tot(i, j) = re_ice_path_tot(i, j) / q_aux
                  else
                    re_ice_path_tot(i, j) = 0.0
