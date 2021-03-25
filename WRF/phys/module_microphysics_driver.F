@@ -3027,7 +3027,7 @@ real,dimension(ims:ime,snc_N,jms:jme), intent(inout) :: sn_qi_sublim3d
 
 !!! constructing vertical velocity
     loc_w(snc_N+1 : bs_Ntot) = 0.0
-    loc_w(1 : snc_N) = w(I,1,J) + (w(I,2,J) - w(I,1,J)) * (bs_Z(1:snc_N)/DZ(i,1,j))
+    loc_w(1 : snc_N) = 0.0 ! w(I,1,J) + (w(I,2,J) - w(I,1,J)) * (bs_Z(1:snc_N)/DZ(i,1,j))
 
 !!! RECONSTRUCTING FULL BLOWING SNOW ARRAY from sn_qn ( surface layer blowing snow ) and bs_qi (all atmosphere blowing snow)
 
