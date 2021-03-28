@@ -393,12 +393,19 @@ SUBROUTINE rd_grib1(IUNIT, gribflnm, level, field, hdate,  &
     map%r_earth = 6367.47   
   endif
 
+
+  if( ginfo(8) .eq. 0.00 ) then
+    ginfo(8) = 0.01
+    ginfo(9) = 0.01
+  endif 
+  write(*,*) 'in read grib: ',ginfo(8),ginfo(9)
+
   if (ksec2(4).eq.0) then ! Lat/Lon grid
      map%igrid = 0
      map%nx = infogrid(1)
      map%ny = infogrid(2)
-     map%dx = 0.01 !ginfo(8)
-     map%dy = 0.01 !ginfo(9)
+     map%dx = ginfo(8)
+     map%dy = ginfo(9)
      map%lat1 = ginfo(3)
      map%lon1 = ginfo(4)
      !  If this is global data, then the dx and dy are more accurately
