@@ -18,7 +18,8 @@ module smooth_module
    !   (found in smth121.F) to array.
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
    subroutine one_two_one(array, start_dom_x, end_dom_x, start_dom_y, end_dom_y, &
-                          start_x, end_x, start_y, end_y, start_z, end_z, npass, msgval)
+                          start_x, end_x, start_y, end_y, start_z, end_z, npass, msgval, &
+                          dom_x,dom_y)
  
       implicit none
   
@@ -28,19 +29,34 @@ module smooth_module
       integer, intent(in) :: npass
       real, intent(in) :: msgval
       real, dimension(start_x:end_x, start_y:end_y, start_z:end_z), intent(inout) :: array 
-  
+      real, intent(in) :: dom_x,dom_y
       ! Local variables
       integer :: ix, iy, iz, ipass
       real, pointer, dimension(:,:,:) :: scratch
-  
+      integer :: counter  
       allocate(scratch(start_x+1:end_x-1, start_y:end_y, start_z:end_z))
-  
+ 
+      write(*,*) 'I AM HERE !',dom_x,dom_y,start_z,end_z
+ 
       do ipass=1,npass
+
+      
+         counter = 0
 
          do iy=start_y,end_y
             do ix=start_x+1,end_x-1
                do iz=start_z,end_z
-                  scratch(ix,iy,iz) = 0.50*array(ix,iy,iz)+0.25*(array(ix-1,iy,iz)+array(ix+1,iy,iz))
+
+                  if ( (abs( (array(ix,iy,iz)-array(ix-1,iy,iz)) / dom_x ) > 0.999) .or. &
+                       (abs( (array(ix,iy,iz)-array(ix+1,iy,iz)) / dom_x ) > 0.999)       ) then
+                     write(*,*) 'smoothing - x ',ix,iy,iz,abs( (array(ix,iy,iz)-array(ix-1,iy,iz)) / dom_x ), &
+                         abs( (array(ix,iy,iz)-array(ix+1,iy,iz)) / dom_x )             
+                     counter = counter + 1
+                    scratch(ix,iy,iz) = 0.50*array(ix,iy,iz)+0.25*(array(ix-1,iy,iz)+array(ix+1,iy,iz))
+                  else
+                    scratch(ix,iy,iz) = array(ix,iy,iz)
+                  endif
+
                end do
             end do
          end do
@@ -48,17 +64,36 @@ module smooth_module
          do iy=start_y+1,end_y-1
             do ix=start_x+1,end_x-1
                do iz=start_z,end_z
-                  array(ix,iy,iz) = 0.50*scratch(ix,iy,iz)+0.25*(scratch(ix,iy-1,iz)+scratch(ix,iy+1,iz))
+
+                  if ( (abs( (scratch(ix,iy,iz)-scratch(ix,iy-1,iz)) / dom_y ) > 0.999) .or. &
+                       (abs( (scratch(ix,iy,iz)-scratch(ix,iy+1,iz)) / dom_y ) > 0.999)  ) then
+                     write(*,*) 'smoothing - y ',ix,iy,iz, abs( (scratch(ix,iy,iz)-scratch(ix,iy-1,iz)) / dom_y ) ,&
+                         abs( (scratch(ix,iy,iz)-scratch(ix,iy+1,iz)) / dom_y )         
+                     counter = counter + 1
+                     array(ix,iy,iz) = 0.50*scratch(ix,iy,iz)+0.25*(scratch(ix,iy-1,iz)+scratch(ix,iy+1,iz))
+                  else
+                     array(ix,iy,iz) = scratch(ix,iy,iz)
+                  endif
+
+
                end do
              end do
           end do
+
 
          call exchange_halo_r(array, &
                               start_x, end_x, start_y, end_y, start_z, end_z, &
                               start_dom_x, end_dom_x, start_dom_y, end_dom_y, start_z, end_z)
 
+          if ( counter .eq. 0 ) then
+              exit
+          endif
+
+
       end do
-  
+ 
+      write(*,*) 'special smoothing done in loops: ',ipass
+ 
       deallocate(scratch)
  
    end subroutine one_two_one 

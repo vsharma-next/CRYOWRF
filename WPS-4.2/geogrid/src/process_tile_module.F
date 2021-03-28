@@ -76,7 +76,7 @@ module process_tile_module
       character (len=128), dimension(2) :: dimnames
       integer :: sub_x, sub_y
       integer :: opt_status
-
+      real :: dom_dx,dom_dy
       ! Probably not all of these nullify statements are needed...
       nullify(xlat_array)
       nullify(xlon_array)
@@ -622,7 +622,11 @@ module process_tile_module
     
          call write_field(start_mem_i, end_mem_i, start_mem_j, end_mem_j, 1, 1, 'LANDMASK', &
                           datestr, landmask)
-     
+    
+
+                  call get_domain_resolution(dom_dx, dom_dy)
+
+ 
          ! If we should only save the dominant category, then no need to write out fractional field
          if (.not.only_save_dominant .or. (idomcatstatus /= 0)) then
      
@@ -638,7 +642,7 @@ module process_tile_module
                                       start_mem_i, end_mem_i,     &
                                       start_mem_j, end_mem_j,     &
                                       min_category, max_category, &
-                                      smth_passes, msg_fill_val)
+                                      smth_passes, msg_fill_val,dom_dx,dom_dy)
                   else if (smth_opt == SMTHDESMTH) then
                      call smth_desmth(field,                      &
                                       start_patch_i, end_patch_i, &
@@ -880,7 +884,8 @@ module process_tile_module
                         end do
                      end do
                   end if
-        
+                          call get_domain_resolution(dom_dx, dom_dy)
+
                   ! We may be asked to smooth the fractional field
                   call get_smooth_option(fieldname, smth_opt, smth_passes, istatus)
                   if (istatus == 0) then
@@ -893,7 +898,7 @@ module process_tile_module
                                             sm1,         em1,           &
                                             sm2,         em2,           &
                                             min_level, max_level,       &
-                                            smth_passes, msg_fill_val)
+                                            smth_passes, msg_fill_val,dom_dx,dom_dy)
                         else if (smth_opt == SMTHDESMTH) then
                            call smth_desmth(field,                      &
                                             start_patch_i, end_patch_i, &
@@ -1048,7 +1053,8 @@ module process_tile_module
                         end if
                      end do
                   end do
-        
+                          call get_domain_resolution(dom_dx, dom_dy)
+
                   ! If we should only save the dominant category, then no need to write out fractional field
                   if (.not.only_save_dominant .or. (idomcatstatus /= 0)) then
         
@@ -1063,7 +1069,7 @@ module process_tile_module
                                              sm1,         em1,           &
                                              sm2,         em2,           &
                                              min_category, max_category, &
-                                             smth_passes, msg_fill_val)
+                                             smth_passes, msg_fill_val,dom_dx,dom_dy)
                            else if (smth_opt == SMTHDESMTH) then
                               call smth_desmth(field,                    &
                                              start_patch_i, end_patch_i, &
