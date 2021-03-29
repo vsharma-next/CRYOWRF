@@ -1568,9 +1568,9 @@ SUBROUTINE PEDOTRANSFER_SR2006(nsoil,sand,clay,orgm,parameters)
                                      ,i,j,snow(i,j),snowh(i,j)
                CALL wrf_message(err_message)
              ENDIF
-             IF ( SNOW( i,j ) > 2000. ) THEN
-               SNOWH(I,J) = SNOWH(I,J) * 2000. / SNOW(I,J)      ! SNOW in mm and SNOWH in m
-               SNOW (I,J) = 2000.                               ! cap SNOW at 2000, maintain density
+             IF ( SNOW( i,j ) > 10000. ) THEN
+               SNOWH(I,J) = SNOWH(I,J) * 10000. / SNOW(I,J)      ! SNOW in mm and SNOWH in m
+               SNOW (I,J) = 10000.                               ! cap SNOW at 2000, maintain density
              ENDIF
           ENDDO
        ENDDO
