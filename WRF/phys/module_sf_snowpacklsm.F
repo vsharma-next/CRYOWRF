@@ -573,7 +573,11 @@ enddo
          out_SNOW   = 0.0 
          out_SNOWH  = 0.0 
 
-         log_z_z0 = log(real(Z_ML,8)/real(0.002,8))
+         if (snpack_mode == 'antarctica') then 
+            log_z_z0 = log(real(Z_ML,8)/real(0.002,8))
+         else
+            log_z_z0 = log(real(Z_ML,8)/real(0.2,8))
+         endif
 
          in_UST = real(UST_V(I,J),8)
          in_SFP = real(PSFC,8)
@@ -703,7 +707,11 @@ enddo
     endif
     
     if ( out_SNOWH .gt. 0 ) then
-      Z0WRF = 0.002
+         if (snpack_mode == 'antarctica') then 
+            Z0WRF = 0.002! log(real(Z_ML,8)/real(0.002,8))
+         else
+            Z0WRF = 0.2 ! log(real(Z_ML,8)/real(0.2,8))
+         endif
     else
       Z0WRF = Z0(I,J)
     endif
