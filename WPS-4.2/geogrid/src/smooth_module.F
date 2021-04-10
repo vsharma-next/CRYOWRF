@@ -36,7 +36,7 @@ module smooth_module
       integer :: counter  
       allocate(scratch(start_x+1:end_x-1, start_y:end_y, start_z:end_z))
  
-      write(*,*) 'I AM HERE !',dom_x,dom_y,start_z,end_z
+      !write(*,*) 'I AM HERE !',dom_x,dom_y,start_z,end_z
  
       do ipass=1,npass
 
