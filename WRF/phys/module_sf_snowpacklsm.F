@@ -906,7 +906,7 @@ endif
     double precision, dimension(snpack_layers_to_save) :: arr_graintype
     double precision, dimension(snpack_layers_to_save) :: arr_mk
 
-    integer,intent(in),dimension(ims:ime,jms:jme) :: snpack_nlayers
+    integer,intent(inout),dimension(ims:ime,jms:jme) :: snpack_nlayers
     logical,intent(in) :: sn_from_file
     INTEGER, INTENT(IN) :: id
     INTEGER, INTENT(IN   )    ::     ids,ide, jds,jde, kds,kde,  &
@@ -999,6 +999,28 @@ endif
                      arr_depd  = real(sn_depd(I,1:snpack_layers_to_save,J),8)
                      arr_graintype = real(sn_graintype(I,1:snpack_layers_to_save,J),8)
                      arr_mk = real(sn_mk(I,1:snpack_layers_to_save,J),8)
+
+                     if(snpack_nlayers(I,J) .eq. 0) then
+                          write(*,*) 'OH MIEN GOTTTT : ', I,J,snpack_nlayers(I,J),id,sn_from_file
+                          if ( (id .gt. 1) .and. ( .not. (sn_from_file) )) then
+                             write(*,*) ' creating snowpack from thin air @ ', id, I,J
+                             arr_T(1:40) = real(263.15,8)
+                             arr_thick(1:40) = real(0.25,8)
+                             arr_volI(1:40) = real(0.5,8)  
+                             arr_volW(1:40) = real(0.0,8)
+                             arr_volV(1:40) = real(0.5,8)
+                             arr_rg(1:40) = real(0.0002,8)
+                             arr_rb(1:40) = real(0.0001,8)
+                             arr_dd(1:40) = real(0.0,8)
+                             arr_sp(1:40) = real(1.0,8)
+                             arr_cdot(1:40) = real(0.0,8)
+                             arr_meta(1:40) = real(0.0,8)
+                             arr_depd(1:40) = real(0.0,8)
+                             arr_graintype = real(0.0,8)
+                             arr_mk = real(0.0,8)
+                             snpack_nlayers(I,J) = 39
+                          endif
+                     endif
  
                 if(new_alloc) then
                    write(*,*) 'NEW ALLOC MUST BE DONE for GRID: ',id, I,J
@@ -1024,7 +1046,7 @@ endif
         do J=jts,jtf
            do I=its,itf
                 counter_snowpoints = counter_snowpoints + 1
-                write(*,*) 'z_firstlev: ', z_firstlev(I,J)
+                !write(*,*) 'z_firstlev: ', z_firstlev(I,J)
                 Z_top = z_firstlev(I,J) * 0.5
                 Z_top_c = real(floor(Z_top)) - 3.0
                 z_bot = 0.5
