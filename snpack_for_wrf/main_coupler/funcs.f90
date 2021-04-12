@@ -46,7 +46,7 @@ logical,intent(inout) :: new_alloc
 write(*,*) ' HEART OF THE MADNESS' , grid_id , f_size, size(global_f(grid_id)%p%f)
 
 new_alloc = .false.
-if( f_size .ne. size(global_f(grid_id)%p%f) .or. (f_size .eq. 1)) then
+if( f_size .ne. size(global_f(grid_id)%p%f)) then
 
    allocate(global_f(grid_id)%p%f(f_size))
    loc_f = coupler(f_size)
