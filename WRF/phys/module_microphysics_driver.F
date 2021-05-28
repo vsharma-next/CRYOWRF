@@ -2924,8 +2924,8 @@ real,dimension(ims:ime,snc_N,jms:jme), intent(inout) :: sn_qi_sublim3d
     real,dimension(snc_N+kte-kts+1)   :: VQ,VN,loc_sfc_meanR
     real,dimension(snc_N+kte-kts+1)   :: mat_a,mat_b,mat_c,mat_d,qi_final,qni_final
     real,dimension(snc_N+kte-kts+1)   :: qv_corr,t_corr,lsub
-    real,dimension(snc_N+kte-kts+1)   :: loc_w
-    real                      :: tmp_real, sfc_qv, loc_qsat, loc_bs_RH,tmp_SN,tmp_SQ
+    real,dimension(snc_N+kte-kts+1)   :: loc_w,loc_bs_RH
+    real                      :: tmp_real, sfc_qv, loc_qsat,tmp_SN,tmp_SQ
     real,parameter            :: alpha = 3.0 ! parameter for blowing snow distribution
     real                      :: gamma_alpha3,gamma_alpha,gamma_alpha_ratio
     real                      :: lambda,mean_Nbest,a_loc,b_loc,g,eta,dyn_vis
@@ -3190,7 +3190,7 @@ if(bool_snow_sublimation) then
     do k = 1,bs_Ntot
 
        call Qsat_noah(bs_temp(k),bs_P(k),tmp_real,loc_qsat)
-       loc_bs_RH = bs_qv(k)/loc_qsat
+       loc_bs_RH(k) = bs_qv(k)/loc_qsat
               
        tempc = bs_temp(k) - 273.15
        if (tempc .ge. 0.0) then
@@ -3208,7 +3208,7 @@ if(bool_snow_sublimation) then
            call b_re(b_loc,mean_NBest)
            call a_re(a_loc,mean_NBest,b_loc)
 
-           !if ( loc_bs_RH .ge. 1.0 ) then
+           !if ( loc_bs_RH(k) .ge. 1.0 ) then
            !    bs_sublim_qi(k)  = 0.0
            !    bs_sublim_qni(k) = 0.0
            !else
@@ -3216,7 +3216,7 @@ if(bool_snow_sublimation) then
                diffu = 2.11e-5 * ((bs_temp(k)/273.15)**(1.94)) * (101325/bs_P(k))
                tcond = (5.69 + 0.0168*(tempc)) *1.0E-5 * 418.936
 
-               undsat = loc_bs_RH - 1.0
+               undsat = loc_bs_RH(k) - 1.0
                A = 2.0*(pi_v) / ( (lsub(k)/(tcond*bs_temp(k))) * ((lsub(k)/(Rv*bs_temp(k))) - 1.0) + &
 &                         + ( (Rv*bs_temp(k))/(diffu*tmp_real) ) )
               B = 0.2682 * A
@@ -3281,6 +3281,13 @@ if(bool_snow_sublimation) then
    !!! calculating the total mass sublimated (kg/m2) in air column 
     bs_sublim(I,J) = bs_sublim(I,J) + sum( (-1.0) * bs_sublim_qi(1:bs_Ntot-1) * &
 &                                          bs_grid_height(1:bs_Ntot-1) * dt_in * bs_rho(1:bs_Ntot-1) )
+
+    if ( (I==37) .and. (J==99) ) then
+          do k=1,snc_N
+            write(*,*) 'mp_driver:',itimestep,k,lsub(k),bs_sublim_qi(k),bs_grid_height(k),bs_rho(k),bs_temp(k), &
+                       &loc_bs_RH(k),HFX_corr,QFX_corr,bs_qi(I,k,J),bs_qni(I,k,J)
+          enddo
+    endif
 
  !UPDATING the qi_final and qni_final arrays to account for sublimation  
 do k=1,bs_Ntot

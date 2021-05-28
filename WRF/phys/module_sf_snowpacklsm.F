@@ -255,7 +255,7 @@ CONTAINS
     logical,intent(in) :: bs_bool
     integer :: counter_snowpoints,second_counter    
     real,parameter :: pi_v = 3.14159265
-
+    logical :: tmp_bs_bool
     real :: dyn_vis
     real :: delZ_b,delZ_m
     integer :: N_can
@@ -454,6 +454,13 @@ do k=1,snc_N
    sfc_qi_drift(its:ite,k,jts:jte)  = VW_SFC(its:ite,k,jts:jte) * sn_qs(its:ite,k,jts:jte) * rho_v(its:ite,kms,jts:jte)  
    sfc_qni_drift(its:ite,k,jts:jte) = VW_SFC(its:ite,k,jts:jte) * sn_ns(its:ite,k,jts:jte) * rho_v(its:ite,kms,jts:jte)
 enddo
+
+if(SNOWH(I,J) .le. 0.2) then
+
+      bs_bdg_total(I,J) = 0.0       
+
+endif
+
 !!!!!!!!!! END OF BLOWING SNOW SURFACE MASS BALANCE and SFC LAYER ADVECTION
 
     second_counter = 0
@@ -622,6 +629,13 @@ enddo
          l_rho_v = real(rho_v(I,kms,J),8)
          l_bs_bdg_total = bs_bdg_total(I,J)
  
+         tmp_bs_bool = bs_bool
+
+         if(SNDPTH .le. 0.2) then
+                 l_bs_bdg_total = 0.0
+                 tmp_bs_bool = .false.
+         endif
+
 
 !         write(*,*) I,J,in_ISWR
 
@@ -639,7 +653,7 @@ enddo
   &                          l_mbug_melt,l_mbug_refreeze, &
   &                          l_ebug_lw_in,l_ebug_lw_out,l_ebug_sw_in,l_ebug_sw_out,l_ebug_sens,l_ebug_lat, &
   &                          l_ebug_low_bc,l_ebug_raine,l_ebug_totale,arr_T,arr_thick,arr_volI,arr_volW, &
-  &                          arr_volV,arr_rg,arr_rb,arr_dd,arr_sp,arr_cdot,arr_meta,arr_depd,arr_graintype,arr_mk,bs_bool, &
+  &                          arr_volV,arr_rg,arr_rb,arr_dd,arr_sp,arr_cdot,arr_meta,arr_depd,arr_graintype,arr_mk,tmp_bs_bool, &
   &                          l_sn_nlayers,l_rho_v, l_bs_bdg_total, qi_in, qni_in,bs_K, bs_mass_turb,    &
   &                          bs_number_turb,l_in_hsalt,l_psi_s, l_loc_sza,l_tau_qc,l_tau_qi, &
   &                          l_tau_qc_tot,l_tau_qi_tot )
@@ -650,6 +664,12 @@ enddo
 
     total_sfc_SQ_QFX = sfc_SQ_QFX(I,J)
     total_sfc_SQ_HFX = sfc_SQ_HFX(I,J)
+
+    if(out_SNOWH .le. 0.2) then
+            total_sfc_SQ_QFX = 0.0
+            total_sfc_SQ_HFX = 0.0
+    endif
+
     out_HFX = out_HFX + real(total_sfc_SQ_HFX,8)
 
     sn_nlayers(I,J)     = l_sn_nlayers
@@ -710,7 +730,7 @@ enddo
          if (snpack_mode == 'antarctica') then 
             Z0WRF = 0.002! log(real(Z_ML,8)/real(0.002,8))
          else
-            Z0WRF = 0.2 ! log(real(Z_ML,8)/real(0.2,8))
+            Z0WRF = 0.002 ! log(real(Z_ML,8)/real(0.2,8))
          endif
     else
       Z0WRF = Z0(I,J)
@@ -742,12 +762,22 @@ enddo
     prof_const_a = (out_HFX /(l_rho_v*1004.67*IN_UST*0.4))
     prof_const_b = (QFX(I,J)/(l_rho_v*IN_UST*0.4)) 
   ! compute T2 and Q2
+
+
+
     T2_snpack(I,J) = real(out_TSK  - prof_const_a*(max((log(2.0/Z0WRF)-real(l_psi_s,4)),0.7)),4)
     Q2_snpack(I,J) = real(out_QSFC - prof_const_b*(max((log(2.0/Z0WRF)-real(l_psi_s,4)),0.7)),4)
 
   ! compute U10 and V10
     U10_snpack(I,J) = (real(in_UST,4)/real(0.4,4))*(max((log(10.0/Z0WRF)-real(l_psi_s,4)),0.7)) * U_ML/real(in_VW,4)
     V10_snpack(I,J) = (real(in_UST,4)/real(0.4,4))*(max((log(10.0/Z0WRF)-real(l_psi_s,4)),0.7)) * V_ML/real(in_VW,4)
+
+    if( (I .eq. 37) .and. (J .eq. 99)) then
+
+            write(*,*) 'in sfc:',itimestep,out_TSK,out_HFX,QFX(I,J),in_UST, &
+                    & Z0WRF,SNOWH(I,J),l_psi_s,T2_snpack(I,J),Q2_snpack(I,J),out_QSFC
+    endif
+
 
   ! sfc_T,sfc_Q
     sfc_T(I,1:snc_N,J) = real(TRAD  - prof_const_a*(max((log(real(snc_Z(I,:,J),4)/Z0WRF)-real(l_psi_s,4)),0.7)),4)
