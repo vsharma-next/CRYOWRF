@@ -2359,6 +2359,11 @@ void Snowpack::runSnowpackModel(CurrentMeteo& Mdata, SnowStation& Xdata, double&
 	Metamorphism metamorphism(cfg);
 	SnowDrift snowdrift(cfg);
 	PhaseChange phasechange(cfg);
+
+
+	cfg.getValue("HEIGHT_OF_METEO_VALUES", "Snowpack", height_of_meteo_values);
+
+
 	if (Xdata.Seaice != NULL) Xdata.Seaice->ConfigSeaIce(cfg);
 
         const int loc_I = Xdata.meta.position.getGridI();

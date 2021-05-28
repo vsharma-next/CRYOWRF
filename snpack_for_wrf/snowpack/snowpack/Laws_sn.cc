@@ -989,9 +989,6 @@ double SnLaws::compSensibleHeatCoefficient(const CurrentMeteo& Mdata, const Snow
 const int I = Xdata.meta.position.getGridI();
 const int J = Xdata.meta.position.getGridJ();
    
-//        if((I==9) & (J==9)){
-//        std::cout << "height,CH,Ground,z:\t" << height_of_meteo_values << "," << Xdata.cH << "," << Xdata.Ground << "," << z << std::endl;
-//        }
 
 	if ((Xdata.cH - Xdata.Ground) > 0.03) {
 		//assert(Mdata.z0>0.);
@@ -1000,6 +997,12 @@ const int J = Xdata.meta.position.getGridJ();
 		//assert(Xdata.BareSoil_z0>0.);
 		lrat = log(z / Xdata.BareSoil_z0);
 	}
+
+
+        if((I==37) & (J==99)){
+          std::cout << "comp sensible heat coeff:\t" << height_of_meteo_values << "," << Xdata.cH << "," << Xdata.Ground << "," << z << "," << Mdata.ustar << "," << lrat << std::endl;
+        }
+
 
 	return Constants::karman * Mdata.ustar / std::max(0.7, lrat-Mdata.psi_s);
         //  return Constants::karman * Mdata.ustar / (lrat-Mdata.psi_s) ; 
