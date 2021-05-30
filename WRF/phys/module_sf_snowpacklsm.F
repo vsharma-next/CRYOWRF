@@ -366,7 +366,12 @@ bs_sus_mass_xchange = real(in_bs_m_exch(I,J),8)
 !        in_bs_m_exch is -ve when mass is being eroded
  
 
-! total budg  
+! total budg 
+
+if( snpack_mode == 'land' ) then
+        bs_bdg_div = 0.0
+endif
+
 bs_bdg_total(I,J) = bs_bdg_div + bs_sus_mass_xchange  
 
 global_bs_bdg_div(I,J) = global_bs_bdg_div(I,J) + real(bs_bdg_div,4)
@@ -402,6 +407,14 @@ do k=1,snc_N
 
 d_sn_qi_dt(k) = sign(max(1.e-10,abs(d_sn_qi_dt(k))),d_sn_qi_dt(k))
 d_sn_qni_dt(k) = sign(max(1.e-5,abs(d_sn_qni_dt(k))),d_sn_qni_dt(k))
+
+if( snpack_mode == 'land' ) then
+         d_sn_qi_dt(k) = 0.0
+        d_sn_qni_dt(k) = 0.0
+endif
+
+
+
 
 bs_sfc_qi_advt(I,k,J)  = d_sn_qi_dt(k)
 bs_sfc_qni_advt(I,k,J) = d_sn_qni_dt(k)

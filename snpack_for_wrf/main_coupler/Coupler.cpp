@@ -929,11 +929,15 @@ int SnowpackInterface::nextStep(int xxx,double h_of_met_vals, double l_TA, doubl
    SnowDrift snowdrift(cfg);
 
    size_t nE = vecXdata.getNumberOfElements();
+   size_t nN_c = vecXdata.getNumberOfNodes();
+
    vector<NodeData>& NDS = vecXdata.Ndata;
    vector<ElementData>& EMS = vecXdata.Edata;
    const double loc_sn_dt = M_TO_S(calculation_step_length) ;
 
-   const bool no_snow = ((nE < vecXdata.SoilNode+1) || (EMS[nE-1].theta[SOIL] > 0.));
+//   const bool no_snow = ((nE < vecXdata.SoilNode+1) || (EMS[nE-1].theta[SOIL] > 0.));
+   const bool no_snow = ( (nE < vecXdata.SoilNode+1) || (EMS[nE-1].theta[SOIL] > 0.) || (EMS[nE-1].theta[WATER] > 0.5) );
+
    if (no_snow) {
                   vecXdata.ErosionMass = 0.;
                   vecXdata.ErosionLevel = vecXdata.SoilNode;
@@ -945,9 +949,14 @@ int SnowpackInterface::nextStep(int xxx,double h_of_met_vals, double l_TA, doubl
           double drift = snowdrift.compMassFlux(EMS[nE-1],ustar_max,vecXdata.meta.getSlopeAngle(),vecXdata.tau_thresh,vecXdata.tau); // [kg m-1 s-1]
           if(!bs_bool) drift = 0.0;
  
-          if(vecXdata.cH < 0.5){
+          if( (vecXdata.cH - vecXdata.Ground) < 0.5){
            drift = 0.0;
-             }         
+             }       
+
+          if( NDS[nN_c-1].T > 272.15){
+             drift = 0.0;
+          }
+
           double ustar_thresh = sqrt(vecXdata.tau_thresh / Mdata.density_air ); // [m s-1]
           double upart = 2.8 * ustar_thresh ; // [ m s-1]
           double conc = drift/upart ; // [kg m-2]

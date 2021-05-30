@@ -999,9 +999,9 @@ const int J = Xdata.meta.position.getGridJ();
 	}
 
 
-        if((I==37) & (J==99)){
-          std::cout << "comp sensible heat coeff:\t" << height_of_meteo_values << "," << Xdata.cH << "," << Xdata.Ground << "," << z << "," << Mdata.ustar << "," << lrat << std::endl;
-        }
+//        if((I==37) & (J==99)){
+//          std::cout << "comp sensible heat coeff:\t" << height_of_meteo_values << "," << Xdata.cH << "," << Xdata.Ground << "," << z << "," << Mdata.ustar << "," << lrat << std::endl;
+//        }
 
 
 	return Constants::karman * Mdata.ustar / std::max(0.7, lrat-Mdata.psi_s);

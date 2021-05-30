@@ -317,9 +317,9 @@ const int J = Xdata.meta.position.getGridJ();
 	Mdata.psi_s = psi_s;
 	Mdata.psi_m = psi_m;
 
-        if((I==37) & (J==99)){
-          std::cout << "in micromet:\t" << z_ratio << "," << zref << "," << d_pump << "," << rough_len << "," << psi_m << "," << ta_v << "," << t_surf << "," << ustar << std::endl;
-        }
+//        if((I==37) & (J==99)){
+//          std::cout << "in micromet:\t" << z_ratio << "," << zref << "," << d_pump << "," << rough_len << "," << psi_m << "," << ta_v << "," << t_surf << "," << ustar << std::endl;
+//        }
 
 }
 

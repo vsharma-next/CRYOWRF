@@ -2943,6 +2943,7 @@ real,dimension(ims:ime,snc_N,jms:jme), intent(inout) :: sn_qi_sublim3d
     real :: HFX_corr,QFX_corr
     real, parameter :: Cp_air = 1004.0
     real, dimension(kts:kte) :: bs_qi_rad_loc,bs_qni_rad_loc
+    real :: first_wrf_thickness
 !!!!! BEGINNING OF BLOWING SNOW TREATMENT
 
     bs_qi_rad = 0.
@@ -3256,10 +3257,18 @@ if(bool_snow_sublimation) then
 
     !! VARUN HACK TO CHECK MASS BALANCE
     !! GETTING THE corrections for temperature and humidity due to sublimation/deposition
-    do k=snc_N+1,bs_Ntot-1
+    do k=snc_N+2,bs_Ntot-1
        qv_corr(k) = dt_in * bs_sublim_qi(k) * (-1.0)
-       t_corr(k) = dt_in * bs_sublim_qi(k) *  1.0 * lsub(k) / Cp_air 
+       t_corr(k)  = dt_in * bs_sublim_qi(k) *  1.0 * lsub(k) / Cp_air 
     enddo
+
+
+    first_wrf_thickness = 0.5 * ( bs_Z(snc_N+1) + bs_Z(snc_N+2) )
+    !! TEST: putting fine mesh heat and mass at the first 'WRF' grid point
+    !t_fm_corr  = sum( lsub(1:snc_N+1) * bs_sublim_qi(1:snc_N+1) * bs_grid_height(1:snc_N+1) * dt_in) / ( Cp_air * first_wrf_thickness  ) 
+    !qv_fm_corr = sum( bs_sublim_qi(1:snc_N+1) * (-1.0) * bs_grid_height(1:snc_N+1) * dt_in ) / first_wrf_thickness 
+     t_corr(snc_N+1) = sum( lsub(1:snc_N+1) * bs_sublim_qi(1:snc_N+1) * bs_grid_height(1:snc_N+1) * dt_in) / ( Cp_air * first_wrf_thickness  ) 
+    qv_corr(snc_N+1) = sum( bs_sublim_qi(1:snc_N+1) * (-1.0) * bs_grid_height(1:snc_N+1) * dt_in ) / first_wrf_thickness 
 
     !!! correct local QV and TEMP
     bs_qv   = bs_qv   + qv_corr
@@ -3275,18 +3284,18 @@ if(bool_snow_sublimation) then
 
 
     !!! correcting the surface heat flux and the vapor flux 
-    HFX_corr =  sum(lsub(1:snc_N) * bs_sublim_qi(1:snc_N) * bs_grid_height(1:snc_N) * bs_rho(1:snc_N))
-    QFX_corr =  sum(bs_sublim_qi(1:snc_N) * bs_grid_height(1:snc_N) * (-1.0) * bs_rho(1:snc_N))
+    HFX_corr = 0.0 ! sum(lsub(1:snc_N) * bs_sublim_qi(1:snc_N) * bs_grid_height(1:snc_N) * bs_rho(1:snc_N))
+    QFX_corr = 0.0 ! sum(bs_sublim_qi(1:snc_N) * bs_grid_height(1:snc_N) * (-1.0) * bs_rho(1:snc_N))
 
    !!! calculating the total mass sublimated (kg/m2) in air column 
     bs_sublim(I,J) = bs_sublim(I,J) + sum( (-1.0) * bs_sublim_qi(1:bs_Ntot-1) * &
 &                                          bs_grid_height(1:bs_Ntot-1) * dt_in * bs_rho(1:bs_Ntot-1) )
 
-    if ( (I==37) .and. (J==99) ) then
-          do k=1,snc_N
-            write(*,*) 'mp_driver:',itimestep,k,lsub(k),bs_sublim_qi(k),bs_grid_height(k),bs_rho(k),bs_temp(k), &
-                       &loc_bs_RH(k),HFX_corr,QFX_corr,bs_qi(I,k,J),bs_qni(I,k,J)
-          enddo
+!    if ( (I==37) .and. (J==99) ) then
+!          do k=1,snc_N
+!            write(*,*) 'mp_driver:',itimestep,k,lsub(k),bs_sublim_qi(k),bs_grid_height(k),bs_rho(k),bs_temp(k), &
+!                       &loc_bs_RH(k),HFX_corr,QFX_corr,bs_qi(I,k,J),bs_qni(I,k,J)
+!          enddo
     endif
 
  !UPDATING the qi_final and qni_final arrays to account for sublimation  
