@@ -935,9 +935,9 @@ int SnowpackInterface::nextStep(int xxx,double h_of_met_vals, double l_TA, doubl
    vector<ElementData>& EMS = vecXdata.Edata;
    const double loc_sn_dt = M_TO_S(calculation_step_length) ;
 
-//   const bool no_snow = ((nE < vecXdata.SoilNode+1) || (EMS[nE-1].theta[SOIL] > 0.));
+//const bool no_snow = ((nE < vecXdata.SoilNode+1) || (EMS[nE-1].theta[SOIL] > 0.));
    const bool no_snow = ( (nE < vecXdata.SoilNode+1) || (EMS[nE-1].theta[SOIL] > 0.) || (EMS[nE-1].theta[WATER] > 0.5) );
-
+ 
    if (no_snow) {
                   vecXdata.ErosionMass = 0.;
                   vecXdata.ErosionLevel = vecXdata.SoilNode;
@@ -951,7 +951,7 @@ int SnowpackInterface::nextStep(int xxx,double h_of_met_vals, double l_TA, doubl
  
           if( (vecXdata.cH - vecXdata.Ground) < 0.5){
            drift = 0.0;
-             }       
+             }        
 
           if( NDS[nN_c-1].T > 272.15){
              drift = 0.0;

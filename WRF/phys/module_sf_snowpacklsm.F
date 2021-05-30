@@ -468,7 +468,8 @@ do k=1,snc_N
    sfc_qni_drift(its:ite,k,jts:jte) = VW_SFC(its:ite,k,jts:jte) * sn_ns(its:ite,k,jts:jte) * rho_v(its:ite,kms,jts:jte)
 enddo
 
-if(SNOWH(I,J) .le. 0.2) then
+
+if( (snpack_mode == 'land') .and. (SNOWH(I,J) .le. 0.2)  ) then
 
       bs_bdg_total(I,J) = 0.0       
 
@@ -645,10 +646,12 @@ endif
          tmp_bs_bool = bs_bool
 
          if(SNDPTH .le. 0.2) then
-                 l_bs_bdg_total = 0.0
                  tmp_bs_bool = .false.
          endif
 
+         if ( (snpack_mode == 'land') ) then
+                 l_bs_bdg_total = 0.0
+         endif
 
 !         write(*,*) I,J,in_ISWR
 
