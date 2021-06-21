@@ -3296,7 +3296,7 @@ if(bool_snow_sublimation) then
 !            write(*,*) 'mp_driver:',itimestep,k,lsub(k),bs_sublim_qi(k),bs_grid_height(k),bs_rho(k),bs_temp(k), &
 !                       &loc_bs_RH(k),HFX_corr,QFX_corr,bs_qi(I,k,J),bs_qni(I,k,J)
 !          enddo
-    endif
+!    endif
 
  !UPDATING the qi_final and qni_final arrays to account for sublimation  
 do k=1,bs_Ntot
