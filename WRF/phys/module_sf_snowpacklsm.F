@@ -597,7 +597,7 @@ endif
          if (snpack_mode == 'antarctica') then 
             log_z_z0 = log(real(Z_ML,8)/real(0.002,8))
          else
-            log_z_z0 = log(real(Z_ML,8)/real(0.2,8))
+            log_z_z0 = log(real(Z_ML,8)/real(0.002,8))
          endif
 
          in_UST = real(UST_V(I,J),8)
@@ -645,11 +645,8 @@ endif
  
          tmp_bs_bool = bs_bool
 
-         if(SNDPTH .le. 0.2) then
+         if( (SNDPTH .le. 0.2) .and. (snpack_mode == 'land') ) then
                  tmp_bs_bool = .false.
-         endif
-
-         if ( (snpack_mode == 'land') ) then
                  l_bs_bdg_total = 0.0
          endif
 
@@ -788,11 +785,11 @@ endif
     U10_snpack(I,J) = (real(in_UST,4)/real(0.4,4))*(max((log(10.0/Z0WRF)-real(l_psi_s,4)),0.7)) * U_ML/real(in_VW,4)
     V10_snpack(I,J) = (real(in_UST,4)/real(0.4,4))*(max((log(10.0/Z0WRF)-real(l_psi_s,4)),0.7)) * V_ML/real(in_VW,4)
 
-    if( (I .eq. 37) .and. (J .eq. 99)) then
-
-            write(*,*) 'in sfc:',itimestep,out_TSK,out_HFX,QFX(I,J),in_UST, &
-                    & Z0WRF,SNOWH(I,J),l_psi_s,T2_snpack(I,J),Q2_snpack(I,J),out_QSFC
-    endif
+!    if( (I .eq. 37) .and. (J .eq. 99)) then
+!
+!            write(*,*) 'in sfc:',itimestep,out_TSK,out_HFX,QFX(I,J),in_UST, &
+!                    & Z0WRF,SNOWH(I,J),l_psi_s,T2_snpack(I,J),Q2_snpack(I,J),out_QSFC
+!    endif
 
 
   ! sfc_T,sfc_Q
