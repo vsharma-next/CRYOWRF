@@ -6,8 +6,6 @@ CRYOWRF is a coupled atmosphere-snow cover model with WRF (v4.2.1) acting as the
 
 In the process of coupling, significant changes had to be made to both WRF. See the [here](changelog_WRF.md) for the changelog for WRF modifications. Additionally, some edits were made to the WPS programs as well. A list of those edits can be found [here](changelog_WPS.md)
 
-
-
 ## Developed by
 
 CRYOWRF is developed by members of the Laboratory of Cryospheric Sciences (CRYOS), ENAC, EPFL, Lausanne

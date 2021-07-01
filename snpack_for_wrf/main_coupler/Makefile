@@ -2,7 +2,8 @@ FC = gfortran # gfortran
 CXX = g++
 
 COMPNAME := $(shell hostname -s | sed 's/[0-9]//g' )
-
+FCFLAGS = -O3 -g -fbacktrace -ffree-line-length-512
+CCFLAGS = -O3 -g 
 ifeq ($(COMPNAME),cryospc)
    $(info UNAME is $(COMPNAME))
    FCFLAGS = -O3 -g -fbacktrace -ffree-line-length-512
