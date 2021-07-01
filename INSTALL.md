@@ -69,7 +69,7 @@ The prereqs needed for compiling CRYOWRF on Piz Daint (or any other similar cray
   module load cray-hdf5-parallel
 ```
 * exporting environment variables (in bash) 
-```
+```shellscript
   export NETCDF=$NETCDF_DIR
   export PNETCDF=$PARALLEL_NETCDF_DIR
   export HDF5=$HDF5_DIR
