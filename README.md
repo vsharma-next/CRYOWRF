@@ -3,8 +3,10 @@
 ## Description
 
 CRYOWRF is a coupled atmosphere-snow cover model with WRF (v4.2.1) acting as the atmospheric core and SNOWPACK acting as snow cover model. SNOWPACK is an option to be used as land-surface scheme within WRF and interacts with WRF via the specially developed coupler. 
+In the process of coupling, significant changes had to be made to both WRF. See the [here](changelog_WRF.md) for the changelog for WRF modifications. 
+Additionally, some edits were made to the WPS programs as well. A list of those edits can be found [here](changelog_WPS.md)
 
-In the process of coupling, significant changes had to be made to both WRF. See the [here](changelog_WRF.md) for the changelog for WRF modifications. Additionally, some edits were made to the WPS programs as well. A list of those edits can be found [here](changelog_WPS.md)
+For installation instructions read [this](INSTALL.md)
 
 ## Developed by
 
