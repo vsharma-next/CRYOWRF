@@ -23,7 +23,7 @@ Install the above as ``` sudo apt install cmake csh m4 gfortran ```
 git clone https://github.com/vsharma-next/CRYOWRF.git
 ```
 
-2. Installing a local copy of netcdf (v 4.1.3) and MPI (mpich, v 3.0.4) [note](#notes)
+2. Installing a local copy of netcdf (v 4.1.3) and MPI (mpich, v 3.0.4) [(1)](#notes)
 ```
 cd ./libraries
 source ./install_libs.sh 
