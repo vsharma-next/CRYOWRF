@@ -86,7 +86,7 @@ The prereqs needed for compiling CRYOWRF on Piz Daint (or any other similar cray
   export WRFIO_NCD_NO_LARGE_FILE_SUPPORT=0
 ```
 
-** It is useful to place these commands in the .bashrc file to have these steps taken care of already **
+**It is useful to place these commands in the .bashrc file to have these steps taken care of already**
 
 #### Installation steps
 
