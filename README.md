@@ -26,4 +26,7 @@ This development was funded by:
 * Ecole Polytechnique Federale de Lausanne (EPFL) ENAC-School of Architecture, Civil and Environmental Engineering's Big Call grant: Project LOSUMEA
 * Swiss National Supercomputer Center (CSCS) projects s873 and s938 computing resources grant
 
+## LICENSE
+CRYOWRF v1.0 is released with GNU General Public License Version 3. See attached license file, LICENSE.txt for details.
+Each component within CRYOWRF comes with its own license policy. Please find individual licenses for WRF, WPS, meteoio and SNOWPACK in their respective folders.
 
