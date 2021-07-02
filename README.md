@@ -17,7 +17,11 @@ and
 
 the Snow processes group, Snow and Atmosphere Research Unit, SLF Davos.
 
-v1.0: Varun Sharma (vsharma.next@gmail.com / varun.sharma@epfl.ch / varun.sharma@sunwell.tech), Franziska Gerber (franziska.gerber@slf.ch)
+v1.0: Varun Sharma (varun.sharma@epfl.ch / varun.sharma@slf.ch / varun.sharma@sunwell.tech), Franziska Gerber (franziska.gerber@slf.ch)
+
+## References
+* For scientific background: **Introducing CRYOWRF v1.0: Multiscale atmospheric flow simulations with advanced snow cover modelling**, Submitted to Geoscientific Model Development (DOI to be added later)
+* Fpr goodies for running simulations and postprocessing: **Sharma, Varun (2021). Reproducibility Dataset for CRYOWRF v1.0. EnviDat. doi:10.16904/envidat.232**
 
 ## Funding
 
