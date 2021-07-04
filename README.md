@@ -1,3 +1,6 @@
+![](./gifs/blowing_snow_antarctica.gif)
+![](./gifs/blowing_snow_alps.gif)
+
 # CRYOWRF v1.0
 
 ## Description
