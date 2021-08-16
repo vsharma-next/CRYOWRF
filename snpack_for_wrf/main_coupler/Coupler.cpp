@@ -946,7 +946,7 @@ int SnowpackInterface::nextStep(int xxx,double h_of_met_vals, double l_TA, doubl
    else {
 
           const double ustar_max = Mdata.ustar; // [ m s-1] 
-          double drift = snowdrift.compMassFlux(EMS[nE-1],ustar_max,vecXdata.meta.getSlopeAngle(),vecXdata.tau_thresh,vecXdata.tau); // [kg m-1 s-1]
+          double drift = snowdrift.compMassFlux(EMS[nE-1],ustar_max,vecXdata.meta.getSlopeAngle(),vecXdata.tau_thresh,vecXdata.tau, Mdata.density_air); // [kg m-1 s-1]
           if(!bs_bool) drift = 0.0;
  
           if( (vecXdata.cH - vecXdata.Ground) < 0.5){

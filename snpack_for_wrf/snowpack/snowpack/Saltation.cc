@@ -395,15 +395,20 @@ int Saltation::sa_TestSaltation(const double& z0, const double& tauS, const doub
  * @return bool
 */
 bool Saltation::compSaltation(const double& i_tauS, const double& tau_th, const double& slope_angle, const double& dg,
-                                  double& massflux, double& c_salt) const
+                                  double& massflux, double& c_salt, const double& density_air) const
 {
 	if (saltation_model == "SORENSEN") { // Default model
 		// Sorensen
 		const double tauS = i_tauS;
-		const double ustar = sqrt(tauS / Constants::density_air);
-		const double ustar_thresh = sqrt(tau_th / Constants::density_air);
+		const double ustar = sqrt(tauS / density_air);
+		const double ustar_thresh = sqrt(tau_th / density_air);
 		if (ustar > ustar_thresh) {
-			massflux = 0.0014 * Constants::density_air * ustar * (ustar - ustar_thresh) * (ustar + 7.6*ustar_thresh + 205.);
+			//Sorensen (2004), parameters from Vionnet et al. (2014)
+			massflux = (density_air / Constants::g) * Optim::pow3(ustar) * (1. - Optim::pow2(ustar_thresh / ustar)) * (2.6 + 2.5 * Optim::pow2(ustar_thresh / ustar) + 2. * ustar_thresh / ustar);
+
+			//Sorensen (1991) with the wrong units
+			//massflux = 0.0014 * Constants::density_air * ustar * (ustar - ustar_thresh) * (ustar + 7.6*ustar_thresh + 205.);
+
 			c_salt = massflux / ustar*0.001; // Arbitrary Scaling to match Doorschot concentration
 		} else {
 			massflux = 0.;

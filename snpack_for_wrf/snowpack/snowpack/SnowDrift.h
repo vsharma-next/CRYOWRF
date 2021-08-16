@@ -43,7 +43,7 @@ class SnowDrift {
 
 		static const double schmidt_drift_fudge;
 
-                double compMassFlux(const ElementData& Edata, const double& ustar, const double& slope_angle, double& l_tau_thresh, double& l_tau) const; // ADDED BY VARUN
+                double compMassFlux(const ElementData& Edata, const double& ustar, const double& slope_angle, double& l_tau_thresh, double& l_tau, const double& density_air) const; // ADDED BY VARUN
 
  	private:
 //		double compMassFlux(const ElementData& Edata, const double& ustar, const double& slope_angle) const; // COMMENTED BY VARUN

@@ -109,7 +109,7 @@ SnowDrift::SnowDrift(const SnowpackConfig& cfg) : saltation(cfg),
  * @param angle Slope angle (deg)
  * @return Saltation mass flux (kg m-1 s-1)
  */
-double SnowDrift::compMassFlux(const ElementData& Edata, const double& ustar, const double& slope_angle, double& l_tau_thresh, double& l_tau) const
+double SnowDrift::compMassFlux(const ElementData& Edata, const double& ustar, const double& slope_angle, double& l_tau_thresh, double& l_tau, const double& density_air) const
 {
 	// Compute basic quantities that are needed: friction velocity, z0, threshold vw
 	// For now assume logarithmic wind profile; TODO change this later
@@ -119,7 +119,7 @@ double SnowDrift::compMassFlux(const ElementData& Edata, const double& ustar, co
 	const double binding = 0.0015 * sig * Edata.N3 * Optim::pow2(Edata.rb/Edata.rg);
 	const double tau_thresh = SnowDrift::schmidt_drift_fudge * (weight + binding);  // Original value for fudge: 1. (Schmidt)
 	//const double ustar_thresh = sqrt(tau_thresh / Constants::density_air);
-	const double tau = Constants::density_air * Optim::pow2(ustar);
+	const double tau = density_air * Optim::pow2(ustar);
 
         l_tau_thresh = tau_thresh;
         l_tau = tau ;
@@ -131,7 +131,7 @@ double SnowDrift::compMassFlux(const ElementData& Edata, const double& ustar, co
 
 	// Compute the saltation mass flux (after Pomeroy and Gray)
 	double Qsalt = 0., Qsusp = 0., c_salt; // The mass fluxes in saltation and suspension (kg m-1 s-1)
-	if (!saltation.compSaltation(tau, tau_thresh, slope_angle, MM_TO_M(2.*Edata.rg), Qsalt, c_salt)) {
+	if (!saltation.compSaltation(tau, tau_thresh, slope_angle, MM_TO_M(2.*Edata.rg), Qsalt, c_salt,density_air)) {
 		prn_msg(__FILE__, __LINE__, "err", Date(), "Saltation computation failed");
 		throw IOException("Saltation computation failed", AT);
 	}
@@ -195,9 +195,9 @@ double SnowDrift::compSnowDrift(const CurrentMeteo& Mdata, SnowStation& Xdata, S
 			const double ustar_max = (Mdata.vw>0.1) ? Mdata.ustar * Mdata.vw_drift / Mdata.vw : 0.; // Scale Mdata.ustar
 			try {
 				if (enforce_measured_snow_heights && !windward)
-					Sdata.drift = compMassFlux(EMS[nE-1], Mdata.ustar, Xdata.meta.getSlopeAngle(), Xdata.tau_thresh, Xdata.tau); // kg m-1 s-1, main station, local vw && nE-1
+					Sdata.drift = compMassFlux(EMS[nE-1], Mdata.ustar, Xdata.meta.getSlopeAngle(), Xdata.tau_thresh, Xdata.tau, Mdata.density_air); // kg m-1 s-1, main station, local vw && nE-1
 				else
-					Sdata.drift = compMassFlux(EMS[nE-1], ustar_max, Xdata.meta.getSlopeAngle(), Xdata.tau_thresh, Xdata.tau); // kg m-1 s-1, windward slope && vw_drift && nE-1
+					Sdata.drift = compMassFlux(EMS[nE-1], ustar_max, Xdata.meta.getSlopeAngle(), Xdata.tau_thresh, Xdata.tau, Mdata.density_air); // kg m-1 s-1, windward slope && vw_drift && nE-1
 			} catch(const exception&) {
 					prn_msg(__FILE__, __LINE__, "err", Mdata.date, "Cannot compute mass flux of drifting snow!");
 					throw;
@@ -266,7 +266,7 @@ double SnowDrift::compSnowDrift(const CurrentMeteo& Mdata, SnowStation& Xdata, S
 	// ... or, in case of no real erosion, check whether you can potentially erode at the main station.
 	// This will never contribute to the drift index VI24, though!
 	} else if (snow_erosion == "VIRTUAL" && (Xdata.ErosionLevel > Xdata.SoilNode)) {
-		double virtuallyErodedMass = compMassFlux(EMS[Xdata.ErosionLevel], Mdata.ustar, Xdata.meta.getSlopeAngle(), Xdata.tau_thresh, Xdata.tau); // kg m-1 s-1, main station, local vw && erosion level
+		double virtuallyErodedMass = compMassFlux(EMS[Xdata.ErosionLevel], Mdata.ustar, Xdata.meta.getSlopeAngle(), Xdata.tau_thresh, Xdata.tau,Mdata.density_air); // kg m-1 s-1, main station, local vw && erosion level
 		virtuallyErodedMass *= sn_dt / Hazard::typical_slope_length; // Convert to eroded snow mass in kg m-2
 		if (virtuallyErodedMass > Constants::eps) {
 			// Add (negative) value stored in Xdata.ErosionMass

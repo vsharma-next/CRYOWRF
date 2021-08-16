@@ -34,7 +34,7 @@ class Saltation {
 		Saltation(const SnowpackConfig& i_cfg);
 
 		bool compSaltation(const double& tauS, const double& tau_th, const double& slope_angle, const double& dg,
-		                   double& massflux, double& c_salt) const;
+		                   double& massflux, double& c_salt, const double& density_air) const;
 
 		static const double karman;
 		static const double z0_salt;
