@@ -404,7 +404,7 @@ bool Saltation::compSaltation(const double& i_tauS, const double& tau_th, const 
 		const double ustar_thresh = sqrt(tau_th / density_air);
 		if (ustar > ustar_thresh) {
 			//Sorensen (2004), parameters from Vionnet et al. (2014)
-			massflux = (density_air / Constants::g) * Optim::pow3(ustar) * (1. - Optim::pow2(ustar_thresh / ustar)) * (2.6 + 2.5 * Optim::pow2(ustar_thresh / ustar) + 2. * ustar_thresh / ustar);
+			massflux = (density_air / Constants::g) * Optim::pow3(ustar) * (1. - Optim::pow2(ustar_thresh / ustar)) * (2.6 + 2.5 * Optim::pow2(ustar_thresh / ustar) + 2. * (ustar_thresh / ustar) );
 
 			//Sorensen (1991) with the wrong units
 			//massflux = 0.0014 * Constants::density_air * ustar * (ustar - ustar_thresh) * (ustar + 7.6*ustar_thresh + 205.);
