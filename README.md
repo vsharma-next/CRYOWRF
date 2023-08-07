@@ -4,11 +4,12 @@ This repository has now been archived. The main repository going forward is the 
 
 https://gitlabext.wsl.ch/atmospheric-models/CRYOWRF
  
+# CRYOWRF v1.0
 
 ![](./gifs/blowing_snow_antarctica.gif)
 ![](./gifs/blowing_snow_alps.gif)
 
-# CRYOWRF v1.0
+
 
 ## Description
 
