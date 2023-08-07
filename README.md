@@ -1,3 +1,10 @@
+## NOTE
+
+This repository has now been archived. The main repository going forward is the institutional repo at 
+
+https://gitlabext.wsl.ch/atmospheric-models/CRYOWRF
+ 
+
 ![](./gifs/blowing_snow_antarctica.gif)
 ![](./gifs/blowing_snow_alps.gif)
 
